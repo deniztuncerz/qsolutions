@@ -17,6 +17,8 @@ from database import get_db, engine
 from models import Quote, RepairStatusUpdate, Base
 from schemas import QuoteCreate, QuoteDisplay, StatusUpdateCreate, StatusDisplay, AdminStatusUpdate
 from utils import append_quote_async
+from email_service import send_emails_async, send_status_update_email
+from gmail_simple_service import send_emails_simple_async, send_status_update_email_simple
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -134,6 +136,17 @@ async def submit_quote(quote_data: QuoteCreate, db: Session = Depends(get_db)):
         # Run Google Sheets update in background
         await append_quote_async(quote_dict)
         
+        # Send email notifications in background (Simple Gmail)
+        # Temporarily disabled due to Gmail authentication issues
+        # await send_emails_simple_async(
+        #     customer_email=db_quote.email,
+        #     customer_name=db_quote.full_name,
+        #     tracking_code=tracking_code,
+        #     device_type=db_quote.device_type,
+        #     issue=db_quote.issue_description
+        # )
+        print(f"[INFO] Email sending temporarily disabled. Quote {tracking_code} submitted successfully.")
+        
         return QuoteDisplay.model_validate(db_quote)
         
     except Exception as e:
@@ -211,6 +224,16 @@ async def update_repair_status(
         
         db.add(status_update)
         db.commit()
+        
+        # Send status update email to customer (Simple Gmail)
+        # Temporarily disabled due to Gmail authentication issues
+        # await send_status_update_email_simple(
+        #     customer_email=quote.email,
+        #     customer_name=quote.full_name,
+        #     tracking_code=status_data.tracking_code,
+        #     status=status_data.status_message
+        # )
+        print(f"[INFO] Status update email temporarily disabled. Status updated for {status_data.tracking_code}")
         
         return {"message": f"Status updated successfully for tracking code {status_data.tracking_code}"}
         

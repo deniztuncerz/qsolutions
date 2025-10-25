@@ -20,15 +20,194 @@ const modelInput = document.getElementById('model');
 const quoteForm = document.getElementById('quote-form');
 const trackingForm = document.getElementById('tracking-form');
 const statusResult = document.getElementById('status-result');
+const quoteStatusResult = document.getElementById('quote-status-result');
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
 
+// ScrollFloat Animation Function
+function initScrollFloat(element, options = {}) {
+    const {
+        animationDuration = 1,
+        ease = 'back.inOut(2)',
+        scrollStart = 'center bottom+=50%',
+        scrollEnd = 'bottom bottom-=40%',
+        stagger = 0.03
+    } = options;
+
+    if (!element) return;
+
+    // Split text into characters
+    const text = element.textContent;
+    const chars = text.split('').map((char, index) => {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        return span;
+    });
+
+    // Clear original text and add character spans
+    element.innerHTML = '';
+    const textContainer = document.createElement('span');
+    textContainer.className = 'scroll-float-text';
+    chars.forEach(char => textContainer.appendChild(char));
+    element.appendChild(textContainer);
+
+    // Add scroll-float class if not present
+    if (!element.classList.contains('scroll-float')) {
+        element.classList.add('scroll-float');
+    }
+
+    // Initialize GSAP animation
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.fromTo(
+        chars,
+        {
+            willChange: 'opacity, transform',
+            opacity: 0,
+            yPercent: 120,
+            scaleY: 2.3,
+            scaleX: 0.7,
+            transformOrigin: '50% 0%'
+        },
+        {
+            duration: animationDuration,
+            ease: ease,
+            opacity: 1,
+            yPercent: 0,
+            scaleY: 1,
+            scaleX: 1,
+            stagger: stagger,
+            scrollTrigger: {
+                trigger: element,
+                start: scrollStart,
+                end: scrollEnd,
+                scrub: true
+            }
+        }
+    );
+}
+
+// RotatingText Animation
+function initRotatingText() {
+    const rotatingTextElement = document.getElementById('rotating-text');
+    if (!rotatingTextElement) {
+        console.log('RotatingText element not found');
+        return;
+    }
+
+    const texts = ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
+    let currentIndex = 0;
+
+    function animateText() {
+        const currentText = texts[currentIndex];
+        console.log('Animating text:', currentText);
+        
+        // Fade out
+        rotatingTextElement.style.opacity = '0';
+        rotatingTextElement.style.transform = 'translateY(30px)';
+        
+        // Wait for fade out, then change text and fade in
+        setTimeout(() => {
+            rotatingTextElement.textContent = currentText;
+            
+            // Force reflow
+            rotatingTextElement.offsetHeight;
+            
+            // Fade in with animation
+            rotatingTextElement.style.opacity = '1';
+            rotatingTextElement.style.transform = 'translateY(0)';
+            
+            console.log('Text updated to:', currentText);
+        }, 300);
+        
+        // Move to next text
+        currentIndex = (currentIndex + 1) % texts.length;
+    }
+
+    // Start animation
+    animateText();
+    
+    // Set interval for continuous rotation
+    setInterval(animateText, 2000);
+}
+
+// Initialize ScrollFloat animations
+function initScrollAnimations() {
+    // Hero title
+    const heroTitle = document.querySelector('.hero-title');
+    if (heroTitle) {
+        initScrollFloat(heroTitle, {
+            animationDuration: 1.2,
+            ease: 'back.out(1.7)',
+            scrollStart: 'top bottom-=20%',
+            scrollEnd: 'center center',
+            stagger: 0.05
+        });
+    }
+
+    // Section titles
+    const sectionTitles = document.querySelectorAll('.section-title');
+    sectionTitles.forEach(title => {
+        title.classList.add('scroll-float-section');
+        initScrollFloat(title, {
+            animationDuration: 1,
+            ease: 'back.out(1.7)',
+            scrollStart: 'center bottom+=30%',
+            scrollEnd: 'bottom bottom-=30%',
+            stagger: 0.07
+        });
+    });
+
+    // Service cards
+    const serviceCards = document.querySelectorAll('.service-card h3');
+    serviceCards.forEach((card, index) => {
+        card.classList.add('scroll-float-small');
+        initScrollFloat(card, {
+            animationDuration: 0.8,
+            ease: 'back.out(1.7)',
+            scrollStart: 'center bottom+=20%',
+            scrollEnd: 'bottom bottom-=20%',
+            stagger: 0.07
+        });
+    });
+
+    // Brand cards
+    const brandCards = document.querySelectorAll('.brand-card .brand-logo');
+    brandCards.forEach((brand, index) => {
+        brand.classList.add('scroll-float-medium');
+        initScrollFloat(brand, {
+            animationDuration: 0.6,
+            ease: 'back.out(1.7)',
+            scrollStart: 'center bottom+=10%',
+            scrollEnd: 'bottom bottom-=10%',
+            stagger: 0.07
+        });
+    });
+}
+
+// Global error handler
+window.addEventListener('error', function(event) {
+    console.error('Global error:', event.error);
+});
+
+window.addEventListener('unhandledrejection', function(event) {
+    console.error('Unhandled promise rejection:', event.reason);
+    event.preventDefault();
+});
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-    initializeSmartForm();
-    initializeEventListeners();
-    initializeNavigation();
-    initializeSmoothScrolling();
+    try {
+        initializeSmartForm();
+        initializeEventListeners();
+        initializeNavigation();
+        initializeSmoothScrolling();
+        initRotatingText();
+        initScrollAnimations();
+    } catch (error) {
+        console.error('Error during initialization:', error);
+    }
 });
 
 /**
@@ -113,7 +292,7 @@ async function handleQuoteSubmission(event) {
     
     try {
         // Show loading state
-        submitButton.textContent = 'Submitting...';
+        submitButton.innerHTML = '<span class="shiny-text disabled">Submitting...</span>';
         submitButton.disabled = true;
         quoteForm.classList.add('loading');
         
@@ -151,8 +330,15 @@ async function handleQuoteSubmission(event) {
         
         const result = await response.json();
         
-        // Show success message
-        showSuccessMessage(`Your request has been received! Your Tracking Code is: ${result.tracking_code}`);
+        // Show success message with more details
+        showQuoteSuccessMessage(`
+            <div style="text-align: center;">
+                <h3 style="margin-bottom: 1rem; color: #065f46;">🎉 Request Submitted Successfully!</h3>
+                <p style="margin-bottom: 0.5rem;"><strong>Your Tracking Code:</strong> <span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">${result.tracking_code}</span></p>
+                <p style="margin-bottom: 0.5rem;">📧 A confirmation email has been sent to your email address.</p>
+                <p style="margin-bottom: 0;">🔍 You can track your repair status using the tracking code above.</p>
+            </div>
+        `);
         
         // Reset form
         quoteForm.reset();
@@ -161,10 +347,10 @@ async function handleQuoteSubmission(event) {
         
     } catch (error) {
         console.error('Quote submission error:', error);
-        showErrorMessage(error.message || 'Failed to submit quote. Please try again.');
+        showQuoteErrorMessage(error.message || 'Failed to submit quote. Please try again.');
     } finally {
         // Reset button state
-        submitButton.textContent = originalText;
+        submitButton.innerHTML = `<span class="shiny-text">${originalText}</span>`;
         submitButton.disabled = false;
         quoteForm.classList.remove('loading');
     }
@@ -243,6 +429,18 @@ function showSuccessMessage(message) {
 }
 
 /**
+ * Show success message for quote form
+ */
+function showQuoteSuccessMessage(message) {
+    quoteStatusResult.className = 'status-result success';
+    quoteStatusResult.innerHTML = `<div class="success-message">${message}</div>`;
+    quoteStatusResult.style.display = 'block';
+    
+    // Scroll to quote status result
+    quoteStatusResult.scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
  * Show error message
  */
 function showErrorMessage(message) {
@@ -252,6 +450,18 @@ function showErrorMessage(message) {
     
     // Scroll to status result
     statusResult.scrollIntoView({ behavior: 'smooth' });
+}
+
+/**
+ * Show error message for quote form
+ */
+function showQuoteErrorMessage(message) {
+    quoteStatusResult.className = 'status-result error';
+    quoteStatusResult.innerHTML = `<div class="error-message">${message}</div>`;
+    quoteStatusResult.style.display = 'block';
+    
+    // Scroll to quote status result
+    quoteStatusResult.scrollIntoView({ behavior: 'smooth' });
 }
 
 /**

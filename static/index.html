@@ -23,7 +23,9 @@
                 <a href="#about" class="nav-link">About Us</a>
                 <a href="#faq" class="nav-link">FAQ</a>
                 <a href="#tracking" class="nav-link">Track Repair</a>
-                <a href="#quote" class="nav-link nav-cta">Get Quote</a>
+                <a href="#quote" class="nav-link nav-cta btn-shiny">
+                    <span class="shiny-text">Get Quote</span>
+                </a>
             </div>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -39,11 +41,20 @@
         <section id="home" class="section">
             <div class="container">
                 <div class="hero-content">
-                    <h1 class="hero-title">Advanced Technical Services</h1>
+                    <div class="hero-title-container">
+                        <span class="hero-q-letter">Q</span>
+                        <div class="rotating-text-container">
+                            <div id="rotating-text" class="rotating-text">Solutions</div>
+                        </div>
+                    </div>
                     <p class="hero-subtitle">Professional repair and maintenance for inverters, batteries, and renewable energy systems</p>
                     <div class="hero-buttons">
-                        <a href="#quote" class="btn btn-primary">Get Quote</a>
-                        <a href="#tracking" class="btn btn-secondary">Track Repair</a>
+                        <a href="#quote" class="btn btn-primary btn-shiny">
+                            <span class="shiny-text">Get Quote</span>
+                        </a>
+                        <a href="#tracking" class="btn btn-secondary btn-shiny">
+                            <span class="shiny-text">Track Repair</span>
+                        </a>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -238,8 +249,13 @@
                             <label for="issue_description">Issue Details *</label>
                             <textarea id="issue_description" name="issue_description" rows="4" placeholder="Please describe the issue you're experiencing..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-large">Submit Quote</button>
+                        <button type="submit" class="btn btn-primary btn-large btn-shiny">
+                            <span class="shiny-text">Submit Quote</span>
+                        </button>
                     </form>
+                    
+                    <!-- Success/Error Message for Quote Form -->
+                    <div id="quote-status-result" class="status-result" style="display: none;"></div>
                 </div>
             </div>
         </section>
@@ -276,6 +292,9 @@
         </div>
     </footer>
 
+    <!-- GSAP Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     <script src="/static/script.js"></script>
 </body>
 </html>
