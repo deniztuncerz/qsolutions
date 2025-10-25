@@ -1,15 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Q Solutions - Advanced Technical Services</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#1dcdc4",
+              "background-light": "#f6f8f8",
+              "background-dark": "#112120",
+            },
+            fontFamily: {
+              "display": ["Manrope", "sans-serif"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body>
+<body class="font-display bg-background-light dark:bg-background-dark">
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -22,7 +47,7 @@
                 <a href="#brands" class="nav-link">Supported Brands</a>
                 <a href="#about" class="nav-link">About Us</a>
                 <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#tracking" class="nav-link">Track Repair</a>
+                <a href="#tracking" class="nav-link">Repair Track</a>
                 <a href="#quote" class="nav-link nav-cta btn-shiny">
                     <span class="shiny-text">Get Quote</span>
                 </a>
@@ -38,27 +63,29 @@
     <!-- Main Content -->
     <main>
         <!-- Home Section -->
-        <section id="home" class="section">
-            <div class="container">
-                <div class="hero-content">
-                    <div class="hero-title-container">
-                        <span class="hero-q-letter">Q</span>
-                        <div class="rotating-text-container">
-                            <div id="rotating-text" class="rotating-text">Solutions</div>
+        <section id="home" class="py-16 md:py-24 px-4">
+            <div class="container mx-auto max-w-[960px]">
+                <div class="flex flex-col gap-8 md:flex-row md:items-center">
+                    <div class="flex flex-col gap-6 md:justify-center flex-1">
+                        <div class="flex flex-col gap-4 text-left">
+                            <h1 class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl">
+                                <span class="hero-q-letter">Q</span>
+                                <div class="rotating-text-container inline-block">
+                                    <div id="rotating-text" class="rotating-text">Solutions</div>
+                                </div>
+                            </h1>
+                            <h2 class="text-slate-600 dark:text-[#95c6c3] text-base font-normal leading-normal md:text-lg">
+                                Professional repair and maintenance for inverters, batteries, and renewable energy systems
+                            </h2>
                         </div>
-                    </div>
-                    <p class="hero-subtitle">Professional repair and maintenance for inverters, batteries, and renewable energy systems</p>
-                    <div class="hero-buttons">
-                        <a href="#quote" class="btn btn-primary btn-shiny">
-                            <span class="shiny-text">Get Quote</span>
-                        </a>
-                        <a href="#tracking" class="btn btn-secondary btn-shiny">
-                            <span class="shiny-text">Track Repair</span>
-                        </a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <div class="tech-icon">⚡</div>
+                        <div class="flex gap-4">
+                            <a href="#quote" class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-background-dark text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
+                                <span class="truncate">Get a Quote</span>
+                            </a>
+                            <a href="#tracking" class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 border-2 border-primary text-primary text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary hover:text-background-dark transition-all">
+                                <span class="truncate">Track Repair</span>
+                            </a>
+                        </div>
                 </div>
             </div>
         </section>
