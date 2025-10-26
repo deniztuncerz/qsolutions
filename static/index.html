@@ -21,20 +21,38 @@
           extend: {
             colors: {
               "primary": "#1dcdc4",
-              "background-light": "#f6f8f8",
-              "background-dark": "#112120",
+              "primary-dark": "#16a085",
+              "primary-light": "#4dd0c1",
+              "secondary": "#2c3e50",
+              "accent": "#f39c12",
+              "success": "#27ae60",
+              "error": "#e74c3c",
+              "warning": "#f39c12",
+              "text-primary": "#2c3e50",
+              "text-secondary": "#7f8c8d",
+              "text-light": "#bdc3c7",
+              "bg-primary": "#ffffff",
+              "bg-secondary": "#f8f9fa",
+              "bg-dark": "#2c3e50",
             },
             fontFamily: {
               "display": ["Manrope", "sans-serif"]
             },
-            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            borderRadius: {"DEFAULT": "12px", "lg": "20px", "xl": "24px", "full": "9999px"},
+            boxShadow: {
+              "sm": "0 2px 4px rgba(0,0,0,0.1)",
+              "md": "0 4px 12px rgba(0,0,0,0.15)",
+              "lg": "0 8px 24px rgba(0,0,0,0.2)",
+              "xl": "0 16px 48px rgba(0,0,0,0.25)",
+            },
           },
         },
       }
     </script>
     <link rel="stylesheet" href="/static/style.css">
 </head>
-<body class="font-display bg-background-light dark:bg-background-dark">
+<body class="font-display bg-bg-primary dark:bg-bg-dark">
+    <!-- Navigation -->
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
@@ -42,15 +60,30 @@
                 <h2>Q Solutions</h2>
             </div>
             <div class="nav-menu">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#services" class="nav-link">Services</a>
-                <a href="#brands" class="nav-link">Supported Brands</a>
-                <a href="#about" class="nav-link">About Us</a>
-                <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#tracking" class="nav-link">Repair Track</a>
-                <a href="#quote" class="nav-link nav-cta btn-shiny">
-                    <span class="shiny-text">Get Quote</span>
-                </a>
+                <div class="nav-links">
+                    <a href="#home" class="nav-link" data-en="Home" data-tr="Ana Sayfa">Home</a>
+                    <a href="#services" class="nav-link" data-en="Services" data-tr="Hizmetler">Services</a>
+                    <a href="#about" class="nav-link" data-en="About Us" data-tr="Hakkımızda">About Us</a>
+                    <a href="faq.html" class="nav-link" data-en="FAQ" data-tr="S.S.S">FAQ</a>
+                    <a href="#tracking" class="nav-link" data-en="Repair Track" data-tr="Onarım Takibi">Repair Track</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="#quote" class="nav-link nav-cta btn-shiny">
+                        <span class="shiny-text" data-en="Get Quote" data-tr="Teklif Al">Get Quote</span>
+                    </a>
+                    <!-- Language Toggle Switch -->
+                    <div class="language-toggle">
+                        <div class="toggle-track">
+                            <div class="toggle-thumb" id="toggle-thumb">
+                                <span class="toggle-flag">🇹🇷</span>
+                            </div>
+                            <div class="toggle-labels">
+                                <span class="toggle-label active" data-lang="tr">TR</span>
+                                <span class="toggle-label" data-lang="en">EN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -60,117 +93,121 @@
         </div>
     </nav>
 
+
     <!-- Main Content -->
     <main>
         <!-- Home Section -->
-        <section id="home" class="py-16 md:py-24 px-4">
-            <div class="container mx-auto max-w-[960px]">
-                <div class="flex flex-col gap-8 md:flex-row md:items-center">
-                    <div class="flex flex-col gap-6 md:justify-center flex-1">
-                        <div class="flex flex-col gap-4 text-left">
-                            <h1 class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] md:text-5xl">
-                                <span class="hero-q-letter">Q</span>
-                                <div class="rotating-text-container inline-block">
-                                    <div id="rotating-text" class="rotating-text">Solutions</div>
-                                </div>
-                            </h1>
-                            <h2 class="text-slate-600 dark:text-[#95c6c3] text-base font-normal leading-normal md:text-lg">
-                                Professional repair and maintenance for inverters, batteries, and renewable energy systems
-                            </h2>
+        <section id="home" class="relative flex h-screen min-h-[600px] w-full items-center justify-center">
+            <div class="absolute inset-0 z-0 bg-cover bg-center" style='background-image: linear-gradient(rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%), url("https://images.unsplash.com/photo-1466611653911-95081537e5b7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80");'></div>
+            <div class="relative z-10 mx-auto max-w-4xl px-4 text-left text-white">
+                <div class="flex flex-col items-start gap-6">
+                    <h1 class="text-4xl font-black leading-tight tracking-tighter md:text-6xl">
+                        <span class="hero-q-letter">Q</span>
+                        <div class="rotating-text-container inline-block">
+                            <div id="rotating-text" class="rotating-text" data-en="Solutions" data-tr="Çözümler">Solutions</div>
                         </div>
-                        <div class="flex gap-4">
-                            <a href="#quote" class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 bg-primary text-background-dark text-base font-bold leading-normal tracking-[0.015em] hover:opacity-90 transition-opacity">
-                                <span class="truncate">Get a Quote</span>
-                            </a>
-                            <a href="#tracking" class="flex min-w-[84px] max-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-5 border-2 border-primary text-primary text-base font-bold leading-normal tracking-[0.015em] hover:bg-primary hover:text-background-dark transition-all">
-                                <span class="truncate">Track Repair</span>
-                            </a>
-                        </div>
+                    </h1>
+                    <h2 class="max-w-2xl text-lg font-normal leading-normal md:text-xl" data-en="Professional repair and maintenance for inverters, batteries, and renewable energy systems" data-tr="İnvertörler, bataryalar ve yenilenebilir enerji sistemleri için profesyonel onarım ve bakım hizmetleri">
+                        Professional repair and maintenance for inverters, batteries, and renewable energy systems
+                    </h2>
+                    <div class="flex gap-4 mt-4">
+                        <a href="#quote" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-accent-green text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-en="Get Quote" data-tr="Teklif Al">Get Quote</a>
+                        <a href="#services" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white text-primary text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-en="Our Services" data-tr="Hizmetlerimiz">Our Services</a>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Services Section -->
-        <section id="services" class="section">
-            <div class="container">
-                <h2 class="section-title">Our Services</h2>
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">🔧</div>
-                        <h3>Inverter Repair</h3>
-                        <p>Professional repair and maintenance of solar inverters from leading manufacturers</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🔋</div>
-                        <h3>Battery Systems</h3>
-                        <p>HV and LV battery system diagnostics, repair, and optimization services</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">⚡</div>
-                        <h3>System Diagnostics</h3>
-                        <p>Comprehensive system analysis and troubleshooting for renewable energy installations</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🛠️</div>
-                        <h3>Preventive Maintenance</h3>
-                        <p>Regular maintenance programs to ensure optimal system performance and longevity</p>
-                    </div>
+        <section id="services" class="services-page">
+            <!-- Services Hero Section -->
+            <div class="services-hero">
+                <div class="services-hero-content">
+                    <h1 class="services-hero-title">Hizmetlerimiz</h1>
+                    <p class="services-hero-description">Enerji tesislerinizin verimliliğini ve ömrünü maksimize etmek için tasarlanmış kapsamlı mühendislik çözümleri sunuyoruz.</p>
                 </div>
             </div>
-        </section>
-
-        <!-- Supported Brands Section -->
-        <section id="brands" class="section">
-            <div class="container">
-                <h2 class="section-title">Supported Brands</h2>
-                <div class="brands-grid">
-                    <div class="brand-card">
-                        <div class="brand-logo">Solax</div>
-                        <p>Solar inverters and energy storage solutions</p>
-                    </div>
-                    <div class="brand-card">
-                        <div class="brand-logo">Deye</div>
-                        <p>Hybrid inverters and battery systems</p>
-                    </div>
-                    <div class="brand-card">
-                        <div class="brand-logo">Tommatech</div>
-                        <p>Advanced inverter technology and monitoring</p>
-                    </div>
-                    <div class="brand-card">
-                        <div class="brand-logo">BYD</div>
-                        <p>High-voltage battery systems</p>
-                    </div>
-                    <div class="brand-card">
-                        <div class="brand-logo">Pylontech</div>
-                        <p>Lithium battery storage solutions</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="section">
-            <div class="container">
-                <h2 class="section-title">About Q Solutions</h2>
-                <div class="about-content">
-                    <div class="about-text">
-                        <p>Q Solutions is a leading technical service company specializing in renewable energy systems. With years of experience in the industry, we provide comprehensive repair and maintenance services for inverters, battery systems, and related equipment.</p>
-                        <p>Our team of certified technicians ensures that your renewable energy systems operate at peak efficiency, maximizing your investment and reducing downtime.</p>
-                        <div class="about-features">
-                            <div class="feature">
-                                <span class="feature-icon">✓</span>
-                                <span>Certified Technicians</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">✓</span>
-                                <span>Warranty Coverage</span>
-                            </div>
-                            <div class="feature">
-                                <span class="feature-icon">✓</span>
-                                <span>Fast Turnaround</span>
-                            </div>
+            
+            <!-- Services Grid -->
+            <div class="services-content">
+                <div class="services-grid-new">
+                    <div class="service-card-new">
+                        <div class="service-icon-new">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 12L9 6L15 12L21 6" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M3 18L9 12L15 18L21 12" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
                         </div>
+                        <h3 class="service-title-new">İnvertör Arıza Tespiti</h3>
+                        <p class="service-description-new">Önde gelen üreticilerin güneş enerjisi invertörleri için profesyonel arıza tespit ve bakım hizmetleri.</p>
                     </div>
+                    
+                    <div class="service-card-new">
+                        <div class="service-icon-new">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="7" width="20" height="10" rx="2" stroke="#005691" stroke-width="2"/>
+                                <path d="M6 7V5C6 3.89543 6.89543 3 8 3H16C17.1046 3 18 3.89543 18 5V7" stroke="#005691" stroke-width="2"/>
+                                <path d="M6 17H18" stroke="#005691" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title-new">Batarya Sistemleri</h3>
+                        <p class="service-description-new">Yüksek ve düşük voltaj batarya sistemi tanı, onarım ve optimizasyon hizmetleri.</p>
+                    </div>
+                    
+                    <div class="service-card-new">
+                        <div class="service-icon-new">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 3V21H21" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M9 9L12 6L16 10L20 6" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title-new">Sistem Tanı</h3>
+                        <p class="service-description-new">Yenilenebilir enerji tesisleri için kapsamlı sistem analizi ve sorun giderme.</p>
+                    </div>
+                    
+                    <div class="service-card-new">
+                        <div class="service-icon-new">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="#005691" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="service-title-new">Önleyici Bakım</h3>
+                        <p class="service-description-new">Optimal sistem performansı ve uzun ömürlülük için düzenli bakım programları.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repair Tracking Section -->
+        <section id="tracking" class="section">
+            <div class="container">
+                <h2 class="section-title">Repair Tracking System</h2>
+                <div class="tracking-container">
+                    <form id="tracking-form" class="tracking-form">
+                        <div class="form-group">
+                            <label for="tracking_code">Tracking Code</label>
+                            <input type="text" id="tracking_code" name="tracking_code" placeholder="Enter your tracking code (e.g., QS-123456)" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Check Status</button>
+                    </form>
+                    <div id="status-result" class="status-result"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section - Cinematic Background -->
+        <section id="about" class="about-cinematic">
+            <div class="about-background">
+                <div class="about-overlay"></div>
+            </div>
+            <div class="about-content-panel">
+                <div class="about-panel-content">
+                    <h1 class="about-title">About Q Solutions</h1>
+                    <div class="about-accent-line"></div>
+                    <p class="about-description">
+                        Q Solutions, sürdürülebilir enerji sektöründe, güneş paneli sistem kurulumlarından güç elektroniği çözümlerine kadar tam kapsamlı hizmet sunuyor. Mühendislik uzmanlığımızı, proje tasarımlarından, batarya ve inverter tamiri gibi teknik servis hizmetine kadar geniş bir yelpazede uyguluyoruz. Ürün satışı, arıza tespiti ve kesintisiz teknik destek sağlayarak, enerji yatırımlarınızın her aşamasında verimlilik ve güvenilirliği garanti eden bir çözüm ortağı olarak konumlanıyoruz.
+                    </p>
                 </div>
             </div>
         </section>
@@ -208,24 +245,48 @@
             </div>
         </section>
 
-        <!-- Repair Tracking Section -->
-        <section id="tracking" class="section">
-            <div class="container">
-                <h2 class="section-title">Repair Tracking System</h2>
-                <div class="tracking-container">
-                    <form id="tracking-form" class="tracking-form">
-                        <div class="form-group">
-                            <label for="tracking_code">Tracking Code</label>
-                            <input type="text" id="tracking_code" name="tracking_code" placeholder="Enter your tracking code (e.g., QS-123456)" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Check Status</button>
-                    </form>
-                    <div id="status-result" class="status-result"></div>
+    <!-- ScrollStack Section -->
+    <section class="scroll-stack-section py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4" data-en="Our Services" data-tr="Hizmetlerimiz">Our Services</h2>
+                <p class="text-xl text-gray-600" data-en="Professional repair and maintenance for inverters, batteries, and renewable energy systems" data-tr="İnvertörler, bataryalar ve yenilenebilir enerji sistemleri için profesyonel onarım ve bakım">Professional repair and maintenance for inverters, batteries, and renewable energy systems</p>
+            </div>
+            
+            <div class="scroll-stack-scroller">
+                <div class="scroll-stack-inner">
+                    <div class="scroll-stack-card">
+                        <h2 data-en="Inverter Repair" data-tr="İnvertör Onarımı">Inverter Repair</h2>
+                        <p data-en="Professional repair services for all types of inverters with advanced diagnostic tools and expert technicians." data-tr="Gelişmiş tanı araçları ve uzman teknisyenlerle tüm invertör türleri için profesyonel onarım hizmetleri.">Professional repair services for all types of inverters with advanced diagnostic tools and expert technicians.</p>
+                    </div>
+                    
+                    <div class="scroll-stack-card">
+                        <h2 data-en="Battery Maintenance" data-tr="Batarya Bakımı">Battery Maintenance</h2>
+                        <p data-en="Comprehensive battery maintenance and replacement services to ensure optimal performance and longevity." data-tr="Optimal performans ve uzun ömür sağlamak için kapsamlı batarya bakımı ve değişim hizmetleri.">Comprehensive battery maintenance and replacement services to ensure optimal performance and longevity.</p>
+                    </div>
+                    
+                    <div class="scroll-stack-card">
+                        <h2 data-en="Solar System Support" data-tr="Güneş Enerjisi Desteği">Solar System Support</h2>
+                        <p data-en="Complete support for solar energy systems including installation, maintenance, and troubleshooting services." data-tr="Kurulum, bakım ve sorun giderme hizmetleri dahil güneş enerjisi sistemleri için tam destek.">Complete support for solar energy systems including installation, maintenance, and troubleshooting services.</p>
+                    </div>
+                    
+                    <div class="scroll-stack-card">
+                        <h2 data-en="Energy Storage Solutions" data-tr="Enerji Depolama Çözümleri">Energy Storage Solutions</h2>
+                        <p data-en="Advanced energy storage solutions for residential and commercial applications with cutting-edge technology." data-tr="En son teknoloji ile konut ve ticari uygulamalar için gelişmiş enerji depolama çözümleri.">Advanced energy storage solutions for residential and commercial applications with cutting-edge technology.</p>
+                    </div>
+                    
+                    <div class="scroll-stack-card">
+                        <h2 data-en="24/7 Emergency Service" data-tr="7/24 Acil Servis">24/7 Emergency Service</h2>
+                        <p data-en="Round-the-clock emergency repair services to minimize downtime and ensure continuous power supply." data-tr="Kesintisiz güç kaynağı sağlamak ve arıza süresini minimize etmek için 7/24 acil onarım hizmetleri.">Round-the-clock emergency repair services to minimize downtime and ensure continuous power supply.</p>
+                    </div>
+                    
+                    <div class="scroll-stack-end"></div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Quote Section -->
+    <!-- Quote Section -->
         <section id="quote" class="section">
             <div class="container">
                 <h2 class="section-title">Get Quote</h2>
@@ -308,7 +369,7 @@
                     <h4>Support</h4>
                     <ul>
                         <li><a href="#tracking">Track Repair</a></li>
-                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
                         <li><a href="#quote">Get Quote</a></li>
                     </ul>
                 </div>
@@ -322,6 +383,15 @@
     <!-- GSAP Library -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- ScrollStack Library -->
+    <link rel="stylesheet" href="/static/scroll-stack.css">
+    <script src="/static/scroll-stack.js"></script>
+    <!-- ProfileCard Library -->
+    <link rel="stylesheet" href="/static/profile-card.css">
+    <script src="/static/profile-card.js"></script>
+    <!-- RippleGrid Library -->
+    <link rel="stylesheet" href="/static/ripple-grid.css">
+    <script src="/static/ripple-grid.js"></script>
     <script src="/static/script.js"></script>
 </body>
 </html>

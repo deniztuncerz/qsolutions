@@ -292,3 +292,7 @@ For technical support or questions about the Q Solutions system:
 
 The system is now ready for production use with a modern, responsive interface and robust API backend!
 
+
+
+
+

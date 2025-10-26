@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Q Solutions</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="font-display bg-bg-primary dark:bg-bg-dark">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Q Solutions</h2>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-links">
+                    <a href="index.html#home" class="nav-link" data-en="Home" data-tr="Ana Sayfa">Home</a>
+                    <a href="index.html#services" class="nav-link" data-en="Services" data-tr="Hizmetler">Services</a>
+                    <a href="index.html#about" class="nav-link" data-en="About Us" data-tr="Hakkımızda">About Us</a>
+                    <a href="faq.html" class="nav-link" data-en="FAQ" data-tr="S.S.S">FAQ</a>
+                    <a href="index.html#tracking" class="nav-link" data-en="Repair Track" data-tr="Onarım Takibi">Repair Track</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="index.html#quote" class="nav-link nav-cta btn-shiny">
+                        <span class="shiny-text" data-en="Get Quote" data-tr="Teklif Al">Get Quote</span>
+                    </a>
+                    <!-- Language Toggle -->
+                    <div class="language-toggle">
+                        <button id="lang-toggle" class="lang-btn">
+                            <span class="lang-option active" data-lang="en">EN</span>
+                            <span class="lang-divider">|</span>
+                            <span class="lang-option" data-lang="tr">TR</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section" style="display: flex;">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <details class="faq-item">
+                    <summary class="faq-question">Do you offer a warranty on repairs?</summary>
+                    <div class="faq-answer">
+                        <p>Yes, we provide a comprehensive warranty on all our repair services. The warranty period varies depending on the type of repair and component, typically ranging from 6 months to 2 years.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Is the diagnosis/troubleshooting free?</summary>
+                    <div class="faq-answer">
+                        <p>Initial diagnosis is free for most cases. However, if specialized equipment or extensive testing is required, there may be a nominal diagnostic fee. This will be discussed with you before any charges are applied.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">How can I send my device to you?</summary>
+                    <div class="faq-answer">
+                        <p>We provide secure shipping instructions and packaging guidelines. You can either drop off your device at our service center or use our recommended shipping service for safe transport. We'll provide you with a tracking number for your peace of mind.</p>
+                    </div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">What is the average repair time?</summary>
+                    <div class="faq-answer">
+                        <p>Repair times vary depending on the complexity of the issue and parts availability. Simple repairs typically take 3-5 business days, while complex issues may require 1-2 weeks. We'll provide you with an estimated timeline when we receive your device.</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Q Solutions</h3>
+                    <p>Professional technical services for renewable energy systems</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html#tracking">Track Repair</a></li>
+                        <li><a href="faq.html">FAQ</a></li>
+                        <li><a href="index.html#quote">Get Quote</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Email: info@qsolutions.com</p>
+                    <p>Phone: +90 XXX XXX XX XX</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Q Solutions. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+

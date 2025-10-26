@@ -96,8 +96,13 @@ function initRotatingText() {
         return;
     }
 
-    const texts = ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
+    const texts = currentLanguage === 'tr' 
+        ? ['Çözüm', 'Hizmet', 'Teknik', 'Enerji', 'Destek']
+        : ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
     let currentIndex = 0;
+    
+    // Store texts globally for language switching
+    window.rotatingTextWords = texts;
 
     function animateText() {
         const currentText = texts[currentIndex];
@@ -196,6 +201,132 @@ window.addEventListener('unhandledrejection', function(event) {
     event.preventDefault();
 });
 
+// Language Support
+let currentLanguage = localStorage.getItem('language') || 'tr';
+
+// Language data
+const translations = {
+    tr: {
+        'Solutions': 'Çözüm',
+        'Service': 'Hizmet',
+        'Technic': 'Teknik',
+        'Energy': 'Enerji',
+        'Support': 'Destek'
+    },
+    en: {
+        'Solutions': 'Solutions',
+        'Service': 'Service',
+        'Technic': 'Technic',
+        'Energy': 'Energy',
+        'Support': 'Support'
+    }
+};
+
+// Initialize language
+function initLanguage() {
+    // Set initial language
+    setLanguage(currentLanguage);
+    
+    // Add event listeners for toggle switch
+    const toggleTrack = document.querySelector('.toggle-track');
+    const toggleThumb = document.getElementById('toggle-thumb');
+    const toggleLabels = document.querySelectorAll('.toggle-label');
+    
+    if (toggleTrack && toggleThumb) {
+        toggleTrack.addEventListener('click', function() {
+            const newLang = currentLanguage === 'tr' ? 'en' : 'tr';
+            setLanguage(newLang);
+        });
+        
+        // Label clicks
+        toggleLabels.forEach(label => {
+            label.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const lang = this.getAttribute('data-lang');
+                setLanguage(lang);
+            });
+        });
+    }
+}
+
+// Set language
+function setLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem('language', lang);
+    
+    // Update toggle switch
+    const toggleThumb = document.getElementById('toggle-thumb');
+    const toggleFlag = toggleThumb.querySelector('.toggle-flag');
+    const toggleLabels = document.querySelectorAll('.toggle-label');
+    
+    if (lang === 'tr') {
+        toggleThumb.classList.remove('en');
+        toggleFlag.textContent = '🇹🇷';
+        toggleLabels[0].classList.add('active');
+        toggleLabels[1].classList.remove('active');
+    } else {
+        toggleThumb.classList.add('en');
+        toggleFlag.textContent = '🇺🇸';
+        toggleLabels[0].classList.remove('active');
+        toggleLabels[1].classList.add('active');
+    }
+    
+    // Update all translatable elements
+    const elements = document.querySelectorAll('[data-en][data-tr]');
+    elements.forEach(element => {
+        const text = element.getAttribute(`data-${lang}`);
+        if (text) {
+            element.textContent = text;
+        }
+    });
+    
+    // Update rotating text
+    updateRotatingText();
+    
+    // Update ScrollStack cards based on language
+    updateScrollStackCards();
+}
+
+// Update rotating text based on language
+function updateRotatingText() {
+    const rotatingTextElement = document.getElementById('rotating-text');
+    if (rotatingTextElement) {
+        const words = currentLanguage === 'tr' 
+            ? ['Çözüm', 'Hizmet', 'Teknik', 'Enerji', 'Destek']
+            : ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
+        
+        // Update the rotating text words
+        if (window.rotatingTextWords) {
+            window.rotatingTextWords = words;
+        }
+    }
+}
+
+// Update ScrollStack cards based on language
+function updateScrollStackCards() {
+    const cards = document.querySelectorAll('.scroll-stack-card');
+    cards.forEach(card => {
+        const title = card.querySelector('h2');
+        const description = card.querySelector('p');
+        
+        if (title) {
+            const enText = title.getAttribute('data-en');
+            const trText = title.getAttribute('data-tr');
+            if (enText && trText) {
+                title.textContent = currentLanguage === 'tr' ? trText : enText;
+            }
+        }
+        
+        if (description) {
+            const enText = description.getAttribute('data-en');
+            const trText = description.getAttribute('data-tr');
+            if (enText && trText) {
+                description.textContent = currentLanguage === 'tr' ? trText : enText;
+            }
+        }
+    });
+}
+
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     try {
@@ -203,6 +334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeEventListeners();
         initializeNavigation();
         initializeSmoothScrolling();
+        initLanguage();
         initRotatingText();
         initScrollAnimations();
     } catch (error) {
@@ -658,6 +790,204 @@ function removeLoadingState(button) {
     button.disabled = false;
     button.textContent = button.dataset.originalText;
     delete button.dataset.originalText;
+}
+
+// Initialize ShinyText animation
+function initShinyText() {
+    // Prevent multiple initializations
+    if (window.shinyTextInitialized) {
+        return;
+    }
+    window.shinyTextInitialized = true;
+    
+    console.log('Initializing ShinyText...');
+    
+    // Add shiny text animation to buttons (only once)
+    const shinyButtons = document.querySelectorAll('.btn-shiny:not([data-shiny-initialized])');
+    shinyButtons.forEach(button => {
+        if (!button.querySelector('.shiny-text')) {
+            const text = button.textContent;
+            button.innerHTML = `<span class="shiny-text">${text}</span>`;
+            button.dataset.shinyInitialized = 'true';
+        }
+    });
+    
+    // Add CSS animation (only if not already added)
+    if (!document.querySelector('#shiny-text-styles')) {
+        const style = document.createElement('style');
+        style.id = 'shiny-text-styles';
+        style.textContent = `
+            .shiny-text {
+                background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+                background-size: 400% 400%;
+                -webkit-background-clip: text;
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+                animation: shinyMove 3s ease-in-out infinite;
+            }
+            
+            @keyframes shinyMove {
+                0%, 100% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Initialize ScrollFloat animation
+function initScrollFloat() {
+    // Prevent multiple initializations
+    if (window.scrollFloatInitialized) {
+        return;
+    }
+    window.scrollFloatInitialized = true;
+    
+    console.log('Initializing ScrollFloat...');
+    
+    // Add scroll float animation to elements (only once)
+    const floatElements = document.querySelectorAll('.scroll-float:not(.scroll-float-text)');
+    floatElements.forEach(element => {
+        element.classList.add('scroll-float-text');
+    });
+    
+    // Add CSS animation (only if not already added)
+    if (!document.querySelector('#scroll-float-styles')) {
+        const style = document.createElement('style');
+        style.id = 'scroll-float-styles';
+        style.textContent = `
+            .scroll-float-text {
+                animation: floatUp 2s ease-in-out infinite;
+            }
+            
+            @keyframes floatUp {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Initialize RotatingText animation
+function initRotatingText() {
+    // Prevent multiple initializations
+    if (window.rotatingTextInitialized) {
+        return;
+    }
+    window.rotatingTextInitialized = true;
+    
+    console.log('Initializing RotatingText...');
+    
+    const rotatingText = document.querySelector('.rotating-text');
+    if (!rotatingText) return;
+    
+    const texts = ['Service', 'Technic', 'Energy', 'Support', 'Solutions'];
+    let currentIndex = 0;
+    
+    function updateText() {
+        const currentText = texts[currentIndex];
+        console.log('Animating text:', currentText);
+        
+        rotatingText.style.opacity = '0';
+        rotatingText.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            rotatingText.textContent = currentText;
+            rotatingText.style.opacity = '1';
+            rotatingText.style.transform = 'translateY(0)';
+            console.log('Text updated to:', currentText);
+        }, 300);
+        
+        currentIndex = (currentIndex + 1) % texts.length;
+    }
+    
+    // Start rotation
+    updateText();
+    setInterval(updateText, 2000);
+}
+
+// Initialize ScrollStack
+function initScrollStack() {
+    // Prevent multiple initializations
+    if (window.scrollStackInitialized) {
+        return;
+    }
+    window.scrollStackInitialized = true;
+    
+    console.log('Initializing ScrollStack...');
+    // ScrollStack is handled by external library
+}
+
+// Initialize PillNav
+function initPillNav() {
+    // Prevent multiple initializations
+    if (window.pillNavInitialized) {
+        return;
+    }
+    window.pillNavInitialized = true;
+    
+    console.log('Initializing PillNav...');
+    // PillNav is handled by external library
+}
+
+// Initialize RippleGrid backgrounds
+function initRippleGrid() {
+    // Disabled - user requested to remove background effects
+    console.log('RippleGrid disabled - background effects removed');
+    return;
+}
+
+// ProfileCards removed
+
+// Initialize all components when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initLanguage();
+    initShinyText();
+    initScrollFloat();
+    initRotatingText();
+    initScrollStack();
+    initPillNav();
+    // initRippleGrid(); // Disabled - background effects removed
+    initSpotlightCards();
+    initSectionToggle();
+});
+
+// Handle section visibility for FAQ
+function initSectionToggle() {
+    // Hide FAQ section by default
+    const faqSection = document.querySelector('#faq');
+    if (faqSection) {
+        faqSection.style.display = 'none';
+    }
+}
+
+// Initialize SpotlightCards
+function initSpotlightCards() {
+    if (window.spotlightCardsInitialized) { return; }
+    window.spotlightCardsInitialized = true;
+    console.log('Initializing SpotlightCards...');
+    
+    const serviceCards = document.querySelectorAll('.service-card');
+    console.log('Found service cards:', serviceCards.length);
+    
+    serviceCards.forEach((card, index) => {
+        console.log(`Setting up spotlight for card ${index + 1}`);
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+            console.log(`Mouse position: ${x}px, ${y}px`);
+        });
+        
+        // Test spotlight effect on mouse enter
+        card.addEventListener('mouseenter', () => {
+            console.log('Mouse entered card');
+        });
+    });
 }
 
 // Export functions for potential external use

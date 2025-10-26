@@ -85,6 +85,17 @@ async def serve_frontend():
     except FileNotFoundError:
         return HTMLResponse(content="<h1>Frontend not found. Please ensure index.html is in the static directory.</h1>")
 
+@app.get("/faq", response_class=HTMLResponse)
+async def serve_faq():
+    """
+    Serve the FAQ page
+    """
+    try:
+        with open("static/faq.html", "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    except FileNotFoundError:
+        return HTMLResponse(content="<h1>FAQ page not found.</h1>")
+
 @app.post("/api/v1/submit_quote", response_model=QuoteDisplay)
 async def submit_quote(quote_data: QuoteCreate, db: Session = Depends(get_db)):
     """
@@ -255,4 +266,4 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8001)

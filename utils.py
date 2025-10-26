@@ -87,3 +87,7 @@ async def append_quote_async(quote_data: Dict[str, Any]):
     loop = asyncio.get_event_loop()
     await loop.run_in_executor(None, append_quote_to_sheet, quote_data)
 
+
+
+
+
