@@ -50,6 +50,11 @@
       }
     </script>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/tracking-aurora.css">
+    <link rel="stylesheet" href="/static/language-switcher.css">
+    <!-- i18n System -->
+    <script src="/static/i18n.js"></script>
+    <meta name="i18n-title" content="Q Solutions - Advanced Technical Services">
 </head>
 <body class="font-display bg-bg-primary dark:bg-bg-dark">
     <!-- Navigation -->
@@ -61,25 +66,37 @@
             </div>
             <div class="nav-menu">
                 <div class="nav-links">
-                    <a href="#home" class="nav-link" data-en="Home" data-tr="Ana Sayfa">Home</a>
-                    <a href="#services" class="nav-link" data-en="Services" data-tr="Hizmetler">Services</a>
-                    <a href="#about" class="nav-link" data-en="About Us" data-tr="Hakkımızda">About Us</a>
-                    <a href="faq.html" class="nav-link" data-en="FAQ" data-tr="S.S.S">FAQ</a>
-                    <a href="#tracking" class="nav-link" data-en="Repair Track" data-tr="Onarım Takibi">Repair Track</a>
+                    <a href="#home" class="nav-link" data-i18n="nav.home">Ana Sayfa</a>
+                    <a href="#services" class="nav-link" data-i18n="nav.services">Hizmetler</a>
+                    <a href="#about" class="nav-link" data-i18n="nav.about">Hakkımızda</a>
+                    <a href="#tracking" class="nav-link" data-i18n="nav.tracking">Onarım Takibi</a>
                 </div>
                 <div class="nav-actions">
                     <a href="#quote" class="nav-link nav-cta btn-shiny">
-                        <span class="shiny-text" data-en="Get Quote" data-tr="Teklif Al">Get Quote</span>
+                        <span class="shiny-text" data-i18n="nav.quote">Teklif Al</span>
                     </a>
-                    <!-- Language Toggle Switch -->
-                    <div class="language-toggle">
-                        <div class="toggle-track">
-                            <div class="toggle-thumb" id="toggle-thumb">
-                                <span class="toggle-flag">🇹🇷</span>
+                    <!-- Modern Language Switcher -->
+                    <div class="language-switcher" id="language-switcher">
+                        <div class="language-current" onclick="toggleLanguageDropdown()">
+                            <svg class="language-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span id="current-lang">TR</span>
+                            <svg class="language-arrow" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="language-dropdown">
+                            <div class="lang-option" data-lang="tr" onclick="changeLanguage('tr')">
+                                <span class="lang-flag">🇹🇷</span>
+                                <span class="lang-name">Türkçe</span>
+                                <span class="lang-code">TR</span>
                             </div>
-                            <div class="toggle-labels">
-                                <span class="toggle-label active" data-lang="tr">TR</span>
-                                <span class="toggle-label" data-lang="en">EN</span>
+                            <div class="lang-option" data-lang="en" onclick="changeLanguage('en')">
+                                <span class="lang-flag">🇬🇧</span>
+                                <span class="lang-name">English</span>
+                                <span class="lang-code">EN</span>
                             </div>
                         </div>
                     </div>
@@ -104,15 +121,15 @@
                     <h1 class="text-4xl font-black leading-tight tracking-tighter md:text-6xl">
                         <span class="hero-q-letter">Q</span>
                         <div class="rotating-text-container inline-block">
-                            <div id="rotating-text" class="rotating-text" data-en="Solutions" data-tr="Çözümler">Solutions</div>
+                            <div id="rotating-text" class="rotating-text">Çözüm</div>
                         </div>
                     </h1>
-                    <h2 class="max-w-2xl text-lg font-normal leading-normal md:text-xl" data-en="Professional repair and maintenance for inverters, batteries, and renewable energy systems" data-tr="İnvertörler, bataryalar ve yenilenebilir enerji sistemleri için profesyonel onarım ve bakım hizmetleri">
-                        Professional repair and maintenance for inverters, batteries, and renewable energy systems
+                    <h2 class="max-w-2xl text-lg font-normal leading-normal md:text-xl" data-i18n="hero.subtitle">
+                        İnvertörler, bataryalar ve yenilenebilir enerji sistemleri için profesyonel onarım ve bakım hizmetleri
                     </h2>
                     <div class="flex gap-4 mt-4">
-                        <a href="#quote" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-accent-green text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-en="Get Quote" data-tr="Teklif Al">Get Quote</a>
-                        <a href="#services" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white text-primary text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-en="Our Services" data-tr="Hizmetlerimiz">Our Services</a>
+                        <a href="#quote" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-accent-green text-white text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-i18n="hero.btnQuote">Teklif Al</a>
+                        <a href="#services" class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-white text-primary text-base font-bold leading-normal tracking-[0.015em] transition-transform hover:scale-105" data-i18n="hero.btnServices">Hizmetlerimiz</a>
                     </div>
                 </div>
             </div>
@@ -123,8 +140,8 @@
             <!-- Services Hero Section -->
             <div class="services-hero">
                 <div class="services-hero-content">
-                    <h1 class="services-hero-title">Hizmetlerimiz</h1>
-                    <p class="services-hero-description">Enerji tesislerinizin verimliliğini ve ömrünü maksimize etmek için tasarlanmış kapsamlı mühendislik çözümleri sunuyoruz.</p>
+                    <h1 class="services-hero-title" data-i18n="services.title">Hizmetlerimiz</h1>
+                    <p class="services-hero-description" data-i18n="services.subtitle">Enerji tesislerinizin verimliliğini ve ömrünü maksimize etmek için tasarlanmış kapsamlı mühendislik çözümleri sunuyoruz.</p>
                 </div>
             </div>
             
@@ -138,8 +155,8 @@
                                 <path d="M3 18L9 12L15 18L21 12" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <h3 class="service-title-new">İnvertör Arıza Tespiti</h3>
-                        <p class="service-description-new">Önde gelen üreticilerin güneş enerjisi invertörleri için profesyonel arıza tespit ve bakım hizmetleri.</p>
+                        <h3 class="service-title-new" data-i18n="services.inverter.title">İnvertör Arıza Tespiti</h3>
+                        <p class="service-description-new" data-i18n="services.inverter.description">Önde gelen üreticilerin güneş enerjisi invertörleri için profesyonel arıza tespit ve bakım hizmetleri.</p>
                     </div>
                     
                     <div class="service-card-new">
@@ -150,8 +167,8 @@
                                 <path d="M6 17H18" stroke="#005691" stroke-width="2"/>
                             </svg>
                         </div>
-                        <h3 class="service-title-new">Batarya Sistemleri</h3>
-                        <p class="service-description-new">Yüksek ve düşük voltaj batarya sistemi tanı, onarım ve optimizasyon hizmetleri.</p>
+                        <h3 class="service-title-new" data-i18n="services.battery.title">Batarya Sistemleri</h3>
+                        <p class="service-description-new" data-i18n="services.battery.description">Yüksek ve düşük voltaj batarya sistemi tanı, onarım ve optimizasyon hizmetleri.</p>
                     </div>
                     
                     <div class="service-card-new">
@@ -161,8 +178,8 @@
                                 <path d="M9 9L12 6L16 10L20 6" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <h3 class="service-title-new">Sistem Tanı</h3>
-                        <p class="service-description-new">Yenilenebilir enerji tesisleri için kapsamlı sistem analizi ve sorun giderme.</p>
+                        <h3 class="service-title-new" data-i18n="services.diagnosis.title">Sistem Tanı</h3>
+                        <p class="service-description-new" data-i18n="services.diagnosis.description">Yenilenebilir enerji tesisleri için kapsamlı sistem analizi ve sorun giderme.</p>
                     </div>
                     
                     <div class="service-card-new">
@@ -172,26 +189,9 @@
                                 <path d="M12 6V12L16 14" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
                         </div>
-                        <h3 class="service-title-new">Önleyici Bakım</h3>
-                        <p class="service-description-new">Optimal sistem performansı ve uzun ömürlülük için düzenli bakım programları.</p>
+                        <h3 class="service-title-new" data-i18n="services.maintenance.title">Önleyici Bakım</h3>
+                        <p class="service-description-new" data-i18n="services.maintenance.description">Optimal sistem performansı ve uzun ömürlülük için düzenli bakım programları.</p>
                     </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Repair Tracking Section -->
-        <section id="tracking" class="section">
-            <div class="container">
-                <h2 class="section-title">Repair Tracking System</h2>
-                <div class="tracking-container">
-                    <form id="tracking-form" class="tracking-form">
-                        <div class="form-group">
-                            <label for="tracking_code">Tracking Code</label>
-                            <input type="text" id="tracking_code" name="tracking_code" placeholder="Enter your tracking code (e.g., QS-123456)" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Check Status</button>
-                    </form>
-                    <div id="status-result" class="status-result"></div>
                 </div>
             </div>
         </section>
@@ -203,11 +203,66 @@
             </div>
             <div class="about-content-panel">
                 <div class="about-panel-content">
-                    <h1 class="about-title">About Q Solutions</h1>
+                    <h1 class="about-title"><span data-i18n="about.titlePart1">Hakkımızda</span><br><span data-i18n="about.titlePart2">Q Solutions</span></h1>
                     <div class="about-accent-line"></div>
-                    <p class="about-description">
+                    <p class="about-description" data-i18n="about.description">
                         Q Solutions, sürdürülebilir enerji sektöründe, güneş paneli sistem kurulumlarından güç elektroniği çözümlerine kadar tam kapsamlı hizmet sunuyor. Mühendislik uzmanlığımızı, proje tasarımlarından, batarya ve inverter tamiri gibi teknik servis hizmetine kadar geniş bir yelpazede uyguluyoruz. Ürün satışı, arıza tespiti ve kesintisiz teknik destek sağlayarak, enerji yatırımlarınızın her aşamasında verimlilik ve güvenilirliği garanti eden bir çözüm ortağı olarak konumlanıyoruz.
                     </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Repair Tracking Section with Aurora Background -->
+        <section id="tracking" class="tracking-aurora-section">
+            <!-- Aurora WebGL Background will be injected here -->
+            
+            <!-- Content Overlay -->
+            <div class="tracking-content-wrapper">
+                <!-- Page Title -->
+                <div class="tracking-header">
+                    <h1 class="tracking-main-title" data-i18n="tracking.title">Arıza Takip Sistemi</h1>
+                    <p class="tracking-subtitle" data-i18n="tracking.subtitle">Tamir sürecinizi gerçek zamanlı olarak takip edin</p>
+                </div>
+                
+                <!-- Tracking Query Panel (Glassmorphism) -->
+                <div class="tracking-glass-panel tracking-query-panel">
+                    <div class="panel-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h2 class="panel-title" data-i18n="tracking.formTitle">Takip Kodu ile Sorgula</h2>
+                    <form id="tracking-form" class="tracking-form-modern">
+                        <div class="form-group-modern">
+                            <label for="tracking_code" class="form-label-modern" data-i18n="tracking.trackingNumber">Takip Numarası</label>
+                            <input 
+                                type="text" 
+                                id="tracking_code" 
+                                name="tracking_code" 
+                                class="form-input-modern"
+                                data-i18n-placeholder="tracking.trackingPlaceholder"
+                                placeholder="QS-123456" 
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="btn-tracking-submit">
+                            <span data-i18n="tracking.btnQuery">SORGULA</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Tracking Result Panel (Glassmorphism) - Initially Hidden -->
+                <div id="tracking-result-panel" class="tracking-glass-panel tracking-result-panel" style="display: none;">
+                    <h2 class="panel-title" data-i18n="tracking.detailsTitle">Takip Detayları</h2>
+                    <div id="tracking-info" class="tracking-info-header"></div>
+                    
+                    <!-- Stepper (Vertical) -->
+                    <div id="tracking-stepper" class="tracking-stepper">
+                        <!-- Stepper steps will be dynamically inserted here -->
+                    </div>
                 </div>
             </div>
         </section>
@@ -245,7 +300,8 @@
             </div>
         </section>
 
-    <!-- ScrollStack Section -->
+    <!-- ScrollStack Section - HIDDEN (uncomment to enable) -->
+    <!--
     <section class="scroll-stack-section py-20 bg-gray-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
@@ -285,68 +341,104 @@
             </div>
         </div>
     </section>
+    -->
 
-    <!-- Quote Section -->
-        <section id="quote" class="section">
-            <div class="container">
-                <h2 class="section-title">Get Quote</h2>
-                <div class="quote-container">
-                    <form id="quote-form" class="quote-form">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="full_name">Full Name *</label>
-                                <input type="text" id="full_name" name="full_name" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email *</label>
-                                <input type="email" id="email" name="email" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="phone">Phone *</label>
-                                <input type="tel" id="phone" name="phone" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="city">City *</label>
-                                <input type="text" id="city" name="city" required>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="device_type">Device Type *</label>
-                                <select id="device_type" name="device_type" required>
-                                    <option value="">Select...</option>
-                                    <option value="Inverter">Inverter</option>
-                                    <option value="HV Battery">HV Battery</option>
-                                    <option value="LV Battery">LV Battery</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="brand">Brand *</label>
-                                <select id="brand" name="brand" required disabled>
-                                    <option value="">Select device type first</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="model">Model *</label>
-                            <input type="text" id="model" name="model" required disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="issue_description">Issue Details *</label>
-                            <textarea id="issue_description" name="issue_description" rows="4" placeholder="Please describe the issue you're experiencing..." required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-large btn-shiny">
-                            <span class="shiny-text">Submit Quote</span>
-                        </button>
-                    </form>
-                    
-                    <!-- Success/Error Message for Quote Form -->
-                    <div id="quote-status-result" class="status-result" style="display: none;"></div>
-                </div>
+    <!-- Quote Section with Aurora Background -->
+    <section id="quote" class="quote-aurora-section">
+        <!-- Aurora WebGL Background will be injected here -->
+        
+        <!-- Content Overlay -->
+        <div class="quote-content-wrapper">
+            <!-- Page Header -->
+            <div class="quote-header">
+                <h1 class="quote-main-title" data-i18n="quote.title">Teklif Al</h1>
+                <p class="quote-subtitle" data-i18n="quote.subtitle">Cihazınız için hızlı ve güvenilir çözüm alın</p>
             </div>
-        </section>
+            
+            <!-- Quote Form Panel (Glassmorphism) -->
+            <div class="quote-glass-panel">
+                <div class="panel-icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 11L12 14L22 4" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H16" stroke="#005691" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 class="panel-title" data-i18n="quote.formTitle">Teklif Formu</h2>
+                
+                <form id="quote-form" class="quote-form-modern">
+                    <!-- Personal Information -->
+                    <div class="form-section">
+                        <h3 class="form-section-title" data-i18n="quote.form.personalInfo">Kişisel Bilgiler</h3>
+                        <div class="form-grid">
+                            <div class="form-group-modern">
+                                <label for="full_name" class="form-label-modern" data-i18n="quote.form.fullName">Ad Soyad</label>
+                                <input type="text" id="full_name" name="full_name" class="form-input-modern" data-i18n-placeholder="quote.form.fullNamePlaceholder" placeholder="Adınız ve soyadınız" required>
+                            </div>
+                            <div class="form-group-modern">
+                                <label for="email" class="form-label-modern" data-i18n="quote.form.email">E-posta</label>
+                                <input type="email" id="email" name="email" class="form-input-modern" data-i18n-placeholder="quote.form.emailPlaceholder" placeholder="ornek@email.com" required>
+                            </div>
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-group-modern">
+                                <label for="phone" class="form-label-modern" data-i18n="quote.form.phone">Telefon</label>
+                                <input type="tel" id="phone" name="phone" class="form-input-modern" data-i18n-placeholder="quote.form.phonePlaceholder" placeholder="5XXXXXXXXX" pattern="[0-9]{10,11}" data-i18n-title="quote.form.phoneTitle" title="Lütfen sadece rakam girin (10-11 hane)" maxlength="11" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            </div>
+                            <div class="form-group-modern">
+                                <label for="city" class="form-label-modern" data-i18n="quote.form.city">Şehir</label>
+                                <input type="text" id="city" name="city" class="form-input-modern" data-i18n-placeholder="quote.form.cityPlaceholder" placeholder="Şehriniz" required>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Device Information -->
+                    <div class="form-section">
+                        <h3 class="form-section-title" data-i18n="quote.form.deviceInfo">Cihaz Bilgileri</h3>
+                        <div class="form-grid">
+                            <div class="form-group-modern">
+                                <label for="device_type" class="form-label-modern" data-i18n="quote.form.deviceType">Cihaz Tipi</label>
+                                <select id="device_type" name="device_type" class="form-input-modern form-select-modern" required>
+                                    <option value="" data-i18n="quote.form.selectOption">Seçiniz...</option>
+                                    <option value="Inverter" data-i18n="quote.form.inverter">İnvertör</option>
+                                    <option value="HV Battery" data-i18n="quote.form.hvBattery">Yüksek Voltaj Batarya</option>
+                                    <option value="LV Battery" data-i18n="quote.form.lvBattery">Düşük Voltaj Batarya</option>
+                                </select>
+                            </div>
+                            <div class="form-group-modern">
+                                <label for="brand" class="form-label-modern" data-i18n="quote.form.brand">Marka</label>
+                                <select id="brand" name="brand" class="form-input-modern form-select-modern" required disabled>
+                                    <option value="" data-i18n="quote.form.selectDeviceFirst">Önce cihaz tipi seçin</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group-modern">
+                            <label for="model" class="form-label-modern" data-i18n="quote.form.model">Model</label>
+                            <input type="text" id="model" name="model" class="form-input-modern" data-i18n-placeholder="quote.form.modelPlaceholder" placeholder="Cihaz modeli" required disabled>
+                        </div>
+                    </div>
+                    
+                    <!-- Issue Description -->
+                    <div class="form-section">
+                        <h3 class="form-section-title" data-i18n="quote.form.issueTitle">Sorun Açıklaması</h3>
+                        <div class="form-group-modern">
+                            <label for="issue_description" class="form-label-modern" data-i18n="quote.form.issueDetails">Detaylı Açıklama</label>
+                            <textarea id="issue_description" name="issue_description" class="form-input-modern form-textarea-modern" rows="5" data-i18n-placeholder="quote.form.issuePlaceholder" placeholder="Cihazınızla ilgili yaşadığınız sorunu detaylı olarak açıklayın..." required></textarea>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-quote-submit">
+                        <span data-i18n="quote.form.btnSubmit">TEKLİF AL</span>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <!-- Success/Error Message -->
+                <div id="quote-status-result" class="quote-status-message" style="display: none;"></div>
+            </div>
+        </div>
+    </section>
     </main>
 
     <!-- Footer -->
@@ -355,43 +447,34 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Q Solutions</h3>
-                    <p>Advanced technical services for renewable energy systems</p>
+                    <p data-i18n="footer.description">Yenilenebilir enerji sistemleri için gelişmiş teknik hizmetler</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Services</h4>
+                    <h4 data-i18n="footer.servicesTitle">Hizmetler</h4>
                     <ul>
-                        <li><a href="#services">Inverter Repair</a></li>
-                        <li><a href="#services">Battery Systems</a></li>
-                        <li><a href="#services">System Diagnostics</a></li>
+                        <li><a href="#services" data-i18n="footer.inverterRepair">İnvertör Tamiri</a></li>
+                        <li><a href="#services" data-i18n="footer.batterySystems">Batarya Sistemleri</a></li>
+                        <li><a href="#services" data-i18n="footer.systemDiagnostics">Sistem Tanısı</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h4>Support</h4>
+                    <h4 data-i18n="footer.supportTitle">Destek</h4>
                     <ul>
-                        <li><a href="#tracking">Track Repair</a></li>
-                        <li><a href="faq.html">FAQ</a></li>
-                        <li><a href="#quote">Get Quote</a></li>
+                        <li><a href="#tracking" data-i18n="footer.trackRepair">Onarım Takibi</a></li>
+                        <li><a href="#quote" data-i18n="footer.getQuote">Teklif Al</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Q Solutions. All rights reserved.</p>
+                <p data-i18n="footer.copyright">&copy; 2024 Q Solutions. Tüm hakları saklıdır.</p>
             </div>
         </div>
     </footer>
 
-    <!-- GSAP Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    <!-- ScrollStack Library -->
-    <link rel="stylesheet" href="/static/scroll-stack.css">
-    <script src="/static/scroll-stack.js"></script>
-    <!-- ProfileCard Library -->
-    <link rel="stylesheet" href="/static/profile-card.css">
-    <script src="/static/profile-card.js"></script>
-    <!-- RippleGrid Library -->
-    <link rel="stylesheet" href="/static/ripple-grid.css">
-    <script src="/static/ripple-grid.js"></script>
-    <script src="/static/script.js"></script>
+    <!-- Aurora WebGL Background -->
+    <script src="/static/aurora.js"></script>
+    <!-- Main Script -->
+    <script src="/static/script.js" defer></script>
 </body>
 </html>
+

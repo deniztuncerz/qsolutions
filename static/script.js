@@ -3,6 +3,51 @@
  * Smart form logic and API integration
  */
 
+// ============================================
+// LANGUAGE SWITCHING FUNCTIONS
+// ============================================
+
+function toggleLanguageDropdown() {
+    const switcher = document.getElementById('language-switcher');
+    switcher.classList.toggle('active');
+    
+    // Close dropdown when clicking outside
+    if (switcher.classList.contains('active')) {
+        setTimeout(() => {
+            document.addEventListener('click', closeLanguageDropdown);
+        }, 0);
+    }
+}
+
+function closeLanguageDropdown(e) {
+    const switcher = document.getElementById('language-switcher');
+    if (switcher && !switcher.contains(e.target)) {
+        switcher.classList.remove('active');
+        document.removeEventListener('click', closeLanguageDropdown);
+    }
+}
+
+function changeLanguage(lang) {
+    if (window.i18n) {
+        window.i18n.changeLanguage(lang);
+    }
+    // Close dropdown
+    const switcher = document.getElementById('language-switcher');
+    if (switcher) {
+        switcher.classList.remove('active');
+    }
+}
+
+// Listen for language change events to update dynamic content
+window.addEventListener('languageChanged', (e) => {
+    console.log('Language changed to:', e.detail.language);
+    // Update any dynamic content here if needed
+});
+
+// ============================================
+// END LANGUAGE SWITCHING
+// ============================================
+
 // Device-Brand mapping for smart form
 const deviceData = {
     "Inverter": ["Solax", "Deye", "Tommatech", "SMA", "Fronius", "Huawei"],
@@ -90,40 +135,46 @@ function initScrollFloat(element, options = {}) {
 
 // RotatingText Animation
 function initRotatingText() {
+    // Prevent multiple initializations
+    if (window.rotatingTextInitialized) {
+        return;
+    }
+    window.rotatingTextInitialized = true;
+    
     const rotatingTextElement = document.getElementById('rotating-text');
     if (!rotatingTextElement) {
         console.log('RotatingText element not found');
         return;
     }
 
-    const texts = currentLanguage === 'tr' 
-        ? ['Çözüm', 'Hizmet', 'Teknik', 'Enerji', 'Destek']
-        : ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
-    let currentIndex = 0;
+    // Get current language from i18n or default to 'tr'
+    const getCurrentLanguage = () => window.i18n ? window.i18n.getCurrentLanguage() : 'tr';
     
-    // Store texts globally for language switching
-    window.rotatingTextWords = texts;
+    // Get texts based on language
+    const getTexts = (lang) => {
+        return lang === 'tr' 
+            ? ['Çözüm', 'Hizmet', 'Teknik', 'Enerji', 'Destek']
+            : ['Solutions', 'Service', 'Technical', 'Energy', 'Support'];
+    };
+    
+    let texts = getTexts(getCurrentLanguage());
+    let currentIndex = 0;
+    let intervalId = null;
 
     function animateText() {
         const currentText = texts[currentIndex];
-        console.log('Animating text:', currentText);
         
         // Fade out
         rotatingTextElement.style.opacity = '0';
-        rotatingTextElement.style.transform = 'translateY(30px)';
+        rotatingTextElement.style.transform = 'translateY(20px)';
         
         // Wait for fade out, then change text and fade in
         setTimeout(() => {
             rotatingTextElement.textContent = currentText;
             
-            // Force reflow
-            rotatingTextElement.offsetHeight;
-            
             // Fade in with animation
             rotatingTextElement.style.opacity = '1';
             rotatingTextElement.style.transform = 'translateY(0)';
-            
-            console.log('Text updated to:', currentText);
         }, 300);
         
         // Move to next text
@@ -134,7 +185,15 @@ function initRotatingText() {
     animateText();
     
     // Set interval for continuous rotation
-    setInterval(animateText, 2000);
+    intervalId = setInterval(animateText, 2500);
+    
+    // Update texts when language changes
+    window.addEventListener('languageChanged', () => {
+        texts = getTexts(getCurrentLanguage());
+        currentIndex = 0;
+        // Immediately show the first text in the new language
+        rotatingTextElement.textContent = texts[0];
+    });
 }
 
 // Initialize ScrollFloat animations
@@ -202,130 +261,7 @@ window.addEventListener('unhandledrejection', function(event) {
 });
 
 // Language Support
-let currentLanguage = localStorage.getItem('language') || 'tr';
-
-// Language data
-const translations = {
-    tr: {
-        'Solutions': 'Çözüm',
-        'Service': 'Hizmet',
-        'Technic': 'Teknik',
-        'Energy': 'Enerji',
-        'Support': 'Destek'
-    },
-    en: {
-        'Solutions': 'Solutions',
-        'Service': 'Service',
-        'Technic': 'Technic',
-        'Energy': 'Energy',
-        'Support': 'Support'
-    }
-};
-
-// Initialize language
-function initLanguage() {
-    // Set initial language
-    setLanguage(currentLanguage);
-    
-    // Add event listeners for toggle switch
-    const toggleTrack = document.querySelector('.toggle-track');
-    const toggleThumb = document.getElementById('toggle-thumb');
-    const toggleLabels = document.querySelectorAll('.toggle-label');
-    
-    if (toggleTrack && toggleThumb) {
-        toggleTrack.addEventListener('click', function() {
-            const newLang = currentLanguage === 'tr' ? 'en' : 'tr';
-            setLanguage(newLang);
-        });
-        
-        // Label clicks
-        toggleLabels.forEach(label => {
-            label.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const lang = this.getAttribute('data-lang');
-                setLanguage(lang);
-            });
-        });
-    }
-}
-
-// Set language
-function setLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem('language', lang);
-    
-    // Update toggle switch
-    const toggleThumb = document.getElementById('toggle-thumb');
-    const toggleFlag = toggleThumb.querySelector('.toggle-flag');
-    const toggleLabels = document.querySelectorAll('.toggle-label');
-    
-    if (lang === 'tr') {
-        toggleThumb.classList.remove('en');
-        toggleFlag.textContent = '🇹🇷';
-        toggleLabels[0].classList.add('active');
-        toggleLabels[1].classList.remove('active');
-    } else {
-        toggleThumb.classList.add('en');
-        toggleFlag.textContent = '🇺🇸';
-        toggleLabels[0].classList.remove('active');
-        toggleLabels[1].classList.add('active');
-    }
-    
-    // Update all translatable elements
-    const elements = document.querySelectorAll('[data-en][data-tr]');
-    elements.forEach(element => {
-        const text = element.getAttribute(`data-${lang}`);
-        if (text) {
-            element.textContent = text;
-        }
-    });
-    
-    // Update rotating text
-    updateRotatingText();
-    
-    // Update ScrollStack cards based on language
-    updateScrollStackCards();
-}
-
-// Update rotating text based on language
-function updateRotatingText() {
-    const rotatingTextElement = document.getElementById('rotating-text');
-    if (rotatingTextElement) {
-        const words = currentLanguage === 'tr' 
-            ? ['Çözüm', 'Hizmet', 'Teknik', 'Enerji', 'Destek']
-            : ['Solutions', 'Service', 'Technic', 'Energy', 'Support'];
-        
-        // Update the rotating text words
-        if (window.rotatingTextWords) {
-            window.rotatingTextWords = words;
-        }
-    }
-}
-
-// Update ScrollStack cards based on language
-function updateScrollStackCards() {
-    const cards = document.querySelectorAll('.scroll-stack-card');
-    cards.forEach(card => {
-        const title = card.querySelector('h2');
-        const description = card.querySelector('p');
-        
-        if (title) {
-            const enText = title.getAttribute('data-en');
-            const trText = title.getAttribute('data-tr');
-            if (enText && trText) {
-                title.textContent = currentLanguage === 'tr' ? trText : enText;
-            }
-        }
-        
-        if (description) {
-            const enText = description.getAttribute('data-en');
-            const trText = description.getAttribute('data-tr');
-            if (enText && trText) {
-                description.textContent = currentLanguage === 'tr' ? trText : enText;
-            }
-        }
-    });
-}
+// Language is now handled by i18n.js
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
@@ -334,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeEventListeners();
         initializeNavigation();
         initializeSmoothScrolling();
-        initLanguage();
+        // initLanguage() removed - using i18n.js
         initRotatingText();
         initScrollAnimations();
     } catch (error) {
@@ -420,11 +356,11 @@ async function handleQuoteSubmission(event) {
     event.preventDefault();
     
     const submitButton = quoteForm.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
+    const originalHTML = submitButton.innerHTML;
     
     try {
         // Show loading state
-        submitButton.innerHTML = '<span class="shiny-text disabled">Submitting...</span>';
+        submitButton.innerHTML = '<span>GÖNDERİLİYOR...</span>';
         submitButton.disabled = true;
         quoteForm.classList.add('loading');
         
@@ -443,7 +379,8 @@ async function handleQuoteSubmission(event) {
         
         // Validate required fields
         if (!validateQuoteData(quoteData)) {
-            throw new Error('Please fill in all required fields');
+            const errorMsg = window.i18n ? window.i18n.t('quote.errorValidation') : 'Lütfen tüm gerekli alanları doldurun';
+            throw new Error(errorMsg);
         }
         
         // Submit to API
@@ -463,14 +400,12 @@ async function handleQuoteSubmission(event) {
         const result = await response.json();
         
         // Show success message with more details
-        showQuoteSuccessMessage(`
-            <div style="text-align: center;">
-                <h3 style="margin-bottom: 1rem; color: #065f46;">🎉 Request Submitted Successfully!</h3>
-                <p style="margin-bottom: 0.5rem;"><strong>Your Tracking Code:</strong> <span style="background: #10b981; color: white; padding: 0.25rem 0.5rem; border-radius: 0.25rem; font-family: monospace;">${result.tracking_code}</span></p>
-                <p style="margin-bottom: 0.5rem;">📧 A confirmation email has been sent to your email address.</p>
-                <p style="margin-bottom: 0;">🔍 You can track your repair status using the tracking code above.</p>
-            </div>
-        `);
+        const successMsg = window.i18n ? window.i18n.t('quote.successMessage').replace('{trackingCode}', `<span style="background: #00A859; color: white; padding: 0.35rem 0.75rem; border-radius: 8px; font-family: monospace; font-size: 1.1em; font-weight: 700;">${result.tracking_code}</span>`) : 
+            `Talebiniz başarıyla alındı! <br><br>
+            <strong>Takip Kodunuz:</strong> <span style="background: #00A859; color: white; padding: 0.35rem 0.75rem; border-radius: 8px; font-family: monospace; font-size: 1.1em; font-weight: 700;">${result.tracking_code}</span><br><br>
+            Bu kodu kullanarak tamir sürecinizi takip edebilirsiniz.<br><br>
+            En kısa sürede iletişime geçilecektir.`;
+        showQuoteSuccessMessage(successMsg);
         
         // Reset form
         quoteForm.reset();
@@ -479,10 +414,11 @@ async function handleQuoteSubmission(event) {
         
     } catch (error) {
         console.error('Quote submission error:', error);
-        showQuoteErrorMessage(error.message || 'Failed to submit quote. Please try again.');
+        const defaultError = window.i18n ? window.i18n.t('quote.errorGeneral') : 'Teklif gönderilemedi. Lütfen tekrar deneyin.';
+        showQuoteErrorMessage(error.message || defaultError);
     } finally {
         // Reset button state
-        submitButton.innerHTML = `<span class="shiny-text">${originalText}</span>`;
+        submitButton.innerHTML = originalHTML;
         submitButton.disabled = false;
         quoteForm.classList.remove('loading');
     }
@@ -496,44 +432,212 @@ async function handleTrackingSubmission(event) {
     
     const trackingCodeInput = document.getElementById('tracking_code');
     const trackingCode = trackingCodeInput.value.trim();
+    const resultPanel = document.getElementById('tracking-result-panel');
+    const trackingInfo = document.getElementById('tracking-info');
+    const trackingStepper = document.getElementById('tracking-stepper');
     
     if (!trackingCode) {
-        showErrorMessage('Please enter a tracking code');
+        const errorMsg = window.i18n ? window.i18n.t('tracking.errorGeneral') : 'Lütfen geçerli bir takip kodu girin';
+        showTrackingError(errorMsg);
         return;
     }
     
     try {
         // Show loading state
-        statusResult.style.display = 'block';
-        statusResult.className = 'status-result';
-        statusResult.innerHTML = '<div class="loading">Checking status...</div>';
+        resultPanel.style.display = 'block';
+        trackingInfo.innerHTML = '<div class="tracking-loading"><div class="tracking-spinner"></div></div>';
+        trackingStepper.innerHTML = '';
         
         // Fetch status from API
         const response = await fetch(`${API_BASE_URL}/api/v1/track/${encodeURIComponent(trackingCode)}`);
         
         if (!response.ok) {
             if (response.status === 404) {
-                throw new Error('Tracking code not found');
+                const notFoundMsg = window.i18n ? window.i18n.t('tracking.notFound') : 'Takip kodu bulunamadı. Lütfen kodunuzu kontrol edin.';
+                throw new Error(notFoundMsg);
             }
             const errorData = await response.json();
-            throw new Error(errorData.detail || 'Failed to retrieve status');
+            const errorMsg = window.i18n ? window.i18n.t('tracking.errorGeneral') : 'Durum bilgisi alınamadı';
+            throw new Error(errorData.detail || errorMsg);
         }
         
         const statusData = await response.json();
         
-        // Display status
-        displayStatusResult(statusData);
+        // Display status with stepper
+        displayTrackingResult(statusData);
         
     } catch (error) {
         console.error('Tracking error:', error);
-        showErrorMessage(error.message || 'Failed to retrieve status. Please try again.');
+        showTrackingError(error.message || 'Durum bilgisi alınamadı. Lütfen tekrar deneyin.');
     }
 }
 
 /**
- * Display status result
+ * Display tracking result with stepper
+ */
+function displayTrackingResult(statusData) {
+    const trackingInfo = document.getElementById('tracking-info');
+    const trackingStepper = document.getElementById('tracking-stepper');
+    const lastUpdated = new Date(statusData.last_updated_at).toLocaleDateString('tr-TR', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    
+    // Display tracking info
+    const trackingCodeLabel = window.i18n ? window.i18n.t('tracking.trackingCode') : 'Takip Kodu';
+    const lastUpdateLabel = window.i18n ? window.i18n.t('tracking.lastUpdate') : 'Son Güncelleme';
+    
+    trackingInfo.innerHTML = `
+        <div class="tracking-info-item">
+            <span class="tracking-info-label">${trackingCodeLabel}:</span>
+            <span class="tracking-info-value">${statusData.tracking_code}</span>
+        </div>
+        <div class="tracking-info-item">
+            <span class="tracking-info-label">${lastUpdateLabel}:</span>
+            <span class="tracking-info-value">${lastUpdated}</span>
+        </div>
+    `;
+    
+    // Define repair steps with i18n support
+    const getStepTitle = (key) => window.i18n ? window.i18n.t(`tracking.steps.${key}.title`) : '';
+    const getStepDesc = (key) => window.i18n ? window.i18n.t(`tracking.steps.${key}.description`) : '';
+    
+    const repairSteps = [
+        {
+            id: 'received',
+            title: getStepTitle('received') || 'Talep Alındı',
+            description: getStepDesc('received') || 'Talebiniz başarıyla sisteme kaydedildi. En kısa sürede iletişime geçilecektir.',
+            icon: checkIcon
+        },
+        {
+            id: 'inspection',
+            title: getStepTitle('inspection') || 'Teknik İnceleme',
+            description: getStepDesc('inspection') || 'Cihazınız teknik ekibimiz tarafından inceleniyor',
+            icon: searchIcon
+        },
+        {
+            id: 'diagnosis',
+            title: getStepTitle('diagnosis') || 'Arıza Tespiti',
+            description: getStepDesc('diagnosis') || 'Sorun tespit edildi ve çözüm planı hazırlanıyor',
+            icon: diagnosticIcon
+        },
+        {
+            id: 'repair',
+            title: getStepTitle('repair') || 'Onarım Aşaması',
+            description: getStepDesc('repair') || 'Cihazınız onarım sürecinde',
+            icon: repairIcon
+        },
+        {
+            id: 'testing',
+            title: getStepTitle('testing') || 'Test ve Kalite Kontrol',
+            description: getStepDesc('testing') || 'Onarım tamamlandı, testler yapılıyor',
+            icon: testIcon
+        },
+        {
+            id: 'completed',
+            title: getStepTitle('completed') || 'Tamamlandı',
+            description: getStepDesc('completed') || 'Cihazınız teslime hazır',
+            icon: completedIcon
+        }
+    ];
+    
+    // Determine current step based on status
+    const currentStatus = statusData.current_status.toLowerCase();
+    let currentStepIndex = 0;
+    
+    if (currentStatus.includes('inspection') || currentStatus.includes('incelemen')) {
+        currentStepIndex = 1;
+    } else if (currentStatus.includes('diagnosis') || currentStatus.includes('tespit')) {
+        currentStepIndex = 2;
+    } else if (currentStatus.includes('repair') || currentStatus.includes('onarım')) {
+        currentStepIndex = 3;
+    } else if (currentStatus.includes('test') || currentStatus.includes('kontrol')) {
+        currentStepIndex = 4;
+    } else if (currentStatus.includes('complete') || currentStatus.includes('tamamlan') || currentStatus.includes('hazır')) {
+        currentStepIndex = 5;
+    }
+    
+    // Generate stepper HTML
+    trackingStepper.innerHTML = repairSteps.map((step, index) => {
+        let stepState = 'pending';
+        if (index < currentStepIndex) {
+            stepState = 'completed';
+        } else if (index === currentStepIndex) {
+            stepState = 'active';
+        }
+        
+        return `
+            <div class="stepper-step ${stepState}">
+                <div class="stepper-icon">
+                    ${step.icon}
+                </div>
+                <div class="stepper-content">
+                    <h3 class="stepper-title">${step.title}</h3>
+                    <p class="stepper-description">${step.description}</p>
+                    ${stepState === 'active' || stepState === 'completed' ? `<span class="stepper-timestamp">${lastUpdated}</span>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+/**
+ * Show tracking error
+ */
+function showTrackingError(message) {
+    const trackingInfo = document.getElementById('tracking-info');
+    const errorTitle = window.i18n ? window.i18n.t('tracking.errorTitle') : 'Hata';
+    trackingInfo.innerHTML = `
+        <div class="tracking-error">
+            <h3 class="tracking-error-title">${errorTitle}</h3>
+            <p class="tracking-error-message">${message}</p>
+        </div>
+    `;
+}
+
+// SVG Icons for stepper
+const checkIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const searchIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="11" cy="11" r="8" stroke="white" stroke-width="2"/>
+    <path d="M21 21L16.65 16.65" stroke="white" stroke-width="2" stroke-linecap="round"/>
+</svg>`;
+
+const diagnosticIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M2 17L12 22L22 17" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M2 12L12 17L22 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const repairIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const testIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="22 4 12 14.01 9 11.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+const completedIcon = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <polyline points="22 4 12 14.01 9 11.01" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
+/**
+ * Display status result (Legacy - kept for compatibility)
  */
 function displayStatusResult(statusData) {
+    // Call new function
+    displayTrackingResult(statusData);
+}
+
+// Keep old statusResult display for backward compatibility
+function displayOldStatusResult(statusData) {
     const lastUpdated = new Date(statusData.last_updated_at).toLocaleString();
     
     statusResult.className = 'status-result success';
@@ -564,12 +668,16 @@ function showSuccessMessage(message) {
  * Show success message for quote form
  */
 function showQuoteSuccessMessage(message) {
-    quoteStatusResult.className = 'status-result success';
-    quoteStatusResult.innerHTML = `<div class="success-message">${message}</div>`;
+    const successTitle = window.i18n ? window.i18n.t('quote.successTitle') : 'Başarılı!';
+    quoteStatusResult.className = 'quote-status-message success';
+    quoteStatusResult.innerHTML = `
+        <h3>${successTitle}</h3>
+        <p>${message}</p>
+    `;
     quoteStatusResult.style.display = 'block';
     
     // Scroll to quote status result
-    quoteStatusResult.scrollIntoView({ behavior: 'smooth' });
+    quoteStatusResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /**
@@ -588,12 +696,16 @@ function showErrorMessage(message) {
  * Show error message for quote form
  */
 function showQuoteErrorMessage(message) {
-    quoteStatusResult.className = 'status-result error';
-    quoteStatusResult.innerHTML = `<div class="error-message">${message}</div>`;
+    const errorTitle = window.i18n ? window.i18n.t('quote.errorTitle') : 'Hata';
+    quoteStatusResult.className = 'quote-status-message error';
+    quoteStatusResult.innerHTML = `
+        <h3>${errorTitle}</h3>
+        <p>${message}</p>
+    `;
     quoteStatusResult.style.display = 'block';
     
     // Scroll to quote status result
-    quoteStatusResult.scrollIntoView({ behavior: 'smooth' });
+    quoteStatusResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 /**
@@ -869,88 +981,31 @@ function initScrollFloat() {
     }
 }
 
-// Initialize RotatingText animation
-function initRotatingText() {
-    // Prevent multiple initializations
-    if (window.rotatingTextInitialized) {
-        return;
-    }
-    window.rotatingTextInitialized = true;
-    
-    console.log('Initializing RotatingText...');
-    
-    const rotatingText = document.querySelector('.rotating-text');
-    if (!rotatingText) return;
-    
-    const texts = ['Service', 'Technic', 'Energy', 'Support', 'Solutions'];
-    let currentIndex = 0;
-    
-    function updateText() {
-        const currentText = texts[currentIndex];
-        console.log('Animating text:', currentText);
-        
-        rotatingText.style.opacity = '0';
-        rotatingText.style.transform = 'translateY(20px)';
-        
-        setTimeout(() => {
-            rotatingText.textContent = currentText;
-            rotatingText.style.opacity = '1';
-            rotatingText.style.transform = 'translateY(0)';
-            console.log('Text updated to:', currentText);
-        }, 300);
-        
-        currentIndex = (currentIndex + 1) % texts.length;
-    }
-    
-    // Start rotation
-    updateText();
-    setInterval(updateText, 2000);
-}
 
-// Initialize ScrollStack
-function initScrollStack() {
-    // Prevent multiple initializations
-    if (window.scrollStackInitialized) {
-        return;
-    }
-    window.scrollStackInitialized = true;
-    
-    console.log('Initializing ScrollStack...');
-    // ScrollStack is handled by external library
-}
-
-// Initialize PillNav
-function initPillNav() {
-    // Prevent multiple initializations
-    if (window.pillNavInitialized) {
-        return;
-    }
-    window.pillNavInitialized = true;
-    
-    console.log('Initializing PillNav...');
-    // PillNav is handled by external library
-}
-
-// Initialize RippleGrid backgrounds
-function initRippleGrid() {
-    // Disabled - user requested to remove background effects
-    console.log('RippleGrid disabled - background effects removed');
-    return;
-}
+// Removed unused functions: initScrollStack, initPillNav, initRippleGrid
 
 // ProfileCards removed
 
 // Initialize all components when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    initLanguage();
     initShinyText();
     initScrollFloat();
     initRotatingText();
-    initScrollStack();
-    initPillNav();
-    // initRippleGrid(); // Disabled - background effects removed
     initSpotlightCards();
     initSectionToggle();
+});
+
+// Handle language changes
+window.addEventListener('languageChanged', () => {
+    // Re-render tracking results if they are visible
+    const resultPanel = document.getElementById('tracking-result-panel');
+    if (resultPanel && resultPanel.style.display !== 'none') {
+        const trackingCode = document.getElementById('tracking_code').value.trim();
+        if (trackingCode) {
+            // Re-fetch and display tracking results
+            handleTrackingSubmission(new Event('submit'));
+        }
+    }
 });
 
 // Handle section visibility for FAQ
@@ -966,13 +1021,16 @@ function initSectionToggle() {
 function initSpotlightCards() {
     if (window.spotlightCardsInitialized) { return; }
     window.spotlightCardsInitialized = true;
-    console.log('Initializing SpotlightCards...');
     
-    const serviceCards = document.querySelectorAll('.service-card');
-    console.log('Found service cards:', serviceCards.length);
+    // Use the new service card class
+    const serviceCards = document.querySelectorAll('.service-card-new');
     
-    serviceCards.forEach((card, index) => {
-        console.log(`Setting up spotlight for card ${index + 1}`);
+    if (serviceCards.length === 0) {
+        // No cards found, skip initialization
+        return;
+    }
+    
+    serviceCards.forEach((card) => {
         card.addEventListener('mousemove', (e) => {
             const rect = card.getBoundingClientRect();
             const x = e.clientX - rect.left;
@@ -980,12 +1038,6 @@ function initSpotlightCards() {
             
             card.style.setProperty('--mouse-x', `${x}px`);
             card.style.setProperty('--mouse-y', `${y}px`);
-            console.log(`Mouse position: ${x}px, ${y}px`);
-        });
-        
-        // Test spotlight effect on mouse enter
-        card.addEventListener('mouseenter', () => {
-            console.log('Mouse entered card');
         });
     });
 }

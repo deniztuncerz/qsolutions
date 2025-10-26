@@ -740,7 +740,7 @@ body {
   }
   
   .about-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
   }
   
   .about-description {
@@ -944,8 +944,8 @@ body {
 
 /* Footer - Figma Design */
 .footer {
-  background: var(--bg-dark);
-  color: var(--text-white);
+  background: #FFFFFF;
+  color: #333333;
   padding: var(--spacing-2xl) 0 var(--spacing-lg);
   margin-top: var(--spacing-2xl);
 }
@@ -960,13 +960,13 @@ body {
 .footer-section h3,
 .footer-section h4 {
   margin-bottom: var(--spacing-md);
-  color: var(--text-white);
+  color: #005691;
   font-weight: var(--font-weight-bold);
 }
 
 .footer-section h3 {
   font-size: 1.5rem;
-  color: var(--primary-color);
+  color: #005691;
 }
 
 .footer-section ul {
@@ -978,21 +978,21 @@ body {
 }
 
 .footer-section ul li a {
-  color: var(--text-light);
+  color: #666666;
   text-decoration: none;
   transition: var(--transition-normal);
   font-weight: var(--font-weight-medium);
 }
 
 .footer-section ul li a:hover {
-  color: var(--primary-color);
+  color: #005691;
 }
 
 .footer-bottom {
   text-align: center;
   padding-top: var(--spacing-lg);
-  border-top: 1px solid #34495e;
-  color: var(--text-light);
+  border-top: 1px solid #E0E0E0;
+  color: #666666;
   font-weight: var(--font-weight-medium);
 }
 
