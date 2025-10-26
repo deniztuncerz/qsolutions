@@ -1,0 +1,127 @@
+{
+  "nav": {
+    "home": "Home",
+    "services": "Services",
+    "about": "About",
+    "tracking": "Tracking",
+    "quote": "Get Quote"
+  },
+  "hero": {
+    "title": "Expert Solutions for Your Energy Systems",
+    "subtitle": "Professional technical support for inverter, battery, and energy systems maintenance",
+    "btnQuote": "Get Quote",
+    "btnServices": "Our Services"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "We offer comprehensive engineering solutions designed to maximize the efficiency and lifespan of your energy facilities.",
+    "inverter": {
+      "title": "Inverter Fault Detection",
+      "description": "Professional fault detection and maintenance services for solar energy inverters from leading manufacturers."
+    },
+    "battery": {
+      "title": "Battery Systems",
+      "description": "High and low voltage battery system diagnosis, repair, and optimization services."
+    },
+    "diagnosis": {
+      "title": "System Diagnosis",
+      "description": "Comprehensive system analysis and troubleshooting for renewable energy facilities."
+    },
+    "maintenance": {
+      "title": "Preventive Maintenance",
+      "description": "Regular maintenance programs for optimal system performance and longevity."
+    }
+  },
+  "about": {
+    "titlePart1": "About",
+    "titlePart2": "Q Solutions",
+    "description": "Q Solutions provides comprehensive services in the sustainable energy sector, from solar panel system installations to power electronics solutions. We apply our engineering expertise across a wide spectrum, from project designs to technical service such as battery and inverter repairs. We position ourselves as a solution partner that guarantees efficiency and reliability at every stage of your energy investments by providing product sales, fault detection, and uninterrupted technical support."
+  },
+  "tracking": {
+    "title": "Repair Tracking System",
+    "subtitle": "Track your repair process in real-time",
+    "formTitle": "Query with Tracking Code",
+    "trackingNumber": "Tracking Number",
+    "trackingPlaceholder": "QS-123456",
+    "btnQuery": "QUERY",
+    "detailsTitle": "Tracking Details",
+    "trackingCode": "Tracking Code",
+    "lastUpdate": "Last Update",
+    "errorTitle": "Error",
+    "errorGeneral": "Please enter a valid tracking code",
+    "notFound": "Tracking code not found. Please check your code.",
+    "steps": {
+      "received": {
+        "title": "Request Received",
+        "description": "Your request has been successfully registered in the system. We will contact you as soon as possible."
+      },
+      "inspection": {
+        "title": "Technical Inspection",
+        "description": "Your device is being inspected by our technical team"
+      },
+      "diagnosis": {
+        "title": "Fault Detection",
+        "description": "Problem identified and solution plan is being prepared"
+      },
+      "repair": {
+        "title": "Repair Stage",
+        "description": "Your device is in the repair process"
+      },
+      "testing": {
+        "title": "Testing and Quality Control",
+        "description": "Repair completed, tests are being conducted"
+      },
+      "completed": {
+        "title": "Completed",
+        "description": "Your device is ready for delivery"
+      }
+    }
+  },
+  "quote": {
+    "title": "Get Quote",
+    "subtitle": "Get fast and reliable solutions for your device",
+    "formTitle": "Quote Form",
+    "successTitle": "Success!",
+    "successMessage": "Your request has been successfully received! <br><br><strong>Your Tracking Code:</strong> {trackingCode}<br><br>You can track your repair process using this code.<br><br>We will contact you as soon as possible.",
+    "errorTitle": "Error",
+    "errorValidation": "Please fill in all required fields",
+    "errorGeneral": "Quote could not be submitted. Please try again.",
+    "form": {
+      "personalInfo": "Personal Information",
+      "fullName": "Full Name",
+      "fullNamePlaceholder": "Your name and surname",
+      "email": "Email",
+      "emailPlaceholder": "example@email.com",
+      "phone": "Phone",
+      "phonePlaceholder": "5XXXXXXXXX",
+      "phoneTitle": "Please enter only numbers (10-11 digits)",
+      "city": "City",
+      "cityPlaceholder": "Your city",
+      "deviceInfo": "Device Information",
+      "deviceType": "Device Type",
+      "selectOption": "Select...",
+      "inverter": "Inverter",
+      "hvBattery": "High Voltage Battery",
+      "lvBattery": "Low Voltage Battery",
+      "brand": "Brand",
+      "selectDeviceFirst": "Select device type first",
+      "model": "Model",
+      "modelPlaceholder": "Device model",
+      "issueTitle": "Issue Description",
+      "issueDetails": "Detailed Description",
+      "issuePlaceholder": "Please describe the issue you're experiencing with your device in detail...",
+      "btnSubmit": "GET QUOTE"
+    }
+  },
+  "footer": {
+    "description": "Advanced technical services for renewable energy systems",
+    "servicesTitle": "Services",
+    "inverterRepair": "Inverter Repair",
+    "batterySystems": "Battery Systems",
+    "systemDiagnostics": "System Diagnostics",
+    "supportTitle": "Support",
+    "trackRepair": "Track Repair",
+    "getQuote": "Get Quote",
+    "copyright": "© 2024 Q Solutions. All rights reserved."
+  }
+}

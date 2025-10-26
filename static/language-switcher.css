@@ -1,0 +1,234 @@
+/**
+ * Language Switcher Component
+ * Modern, minimalist design for Q Solutions
+ */
+
+/* Language Switcher Container */
+.language-switcher {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+/* Current Language Display */
+.language-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(0, 86, 145, 0.1);
+    border: 2px solid #005691;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #005691;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.language-current:hover {
+    background: #005691;
+    border-color: #005691;
+    color: #ffffff;
+}
+
+.language-current:hover .language-icon,
+.language-current:hover .language-arrow {
+    stroke: #ffffff;
+}
+
+/* Globe Icon */
+.language-icon {
+    width: 18px;
+    height: 18px;
+    stroke: #005691;
+    transition: stroke 0.3s ease;
+}
+
+/* Dropdown Arrow */
+.language-arrow {
+    width: 12px;
+    height: 12px;
+    stroke: #005691;
+    transition: transform 0.3s ease, stroke 0.3s ease;
+}
+
+.language-switcher.active .language-arrow {
+    transform: rotate(180deg);
+}
+
+/* Language Dropdown */
+.language-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 180px;
+    background: #ffffff;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 12px;
+    border: 2px solid rgba(0, 86, 145, 0.2);
+    box-shadow: 
+        0 8px 32px rgba(0, 86, 145, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.12);
+    padding: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+
+.language-switcher.active .language-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* Language Option */
+.lang-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.lang-option:hover {
+    background: rgba(0, 86, 145, 0.12);
+    color: #005691;
+    transform: translateX(4px);
+}
+
+.lang-option.active {
+    background: linear-gradient(135deg, rgba(0, 86, 145, 0.15) 0%, rgba(0, 168, 89, 0.15) 100%);
+    color: #005691;
+    font-weight: 700;
+    border-left: 3px solid #00A859;
+    padding-left: 13px;
+}
+
+.lang-option.active::after {
+    content: '✓';
+    margin-left: auto;
+    font-weight: 700;
+    color: #00A859;
+    font-size: 1.1rem;
+}
+
+/* Language Flag Emoji */
+.lang-flag {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+/* Language Name */
+.lang-name {
+    flex: 1;
+}
+
+/* Language Code */
+.lang-code {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #999;
+    letter-spacing: 0.05em;
+}
+
+.lang-option.active .lang-code {
+    color: #00A859;
+}
+
+/* Loading State */
+body.language-switching {
+    pointer-events: none;
+}
+
+body.language-switching::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(2px);
+    z-index: 9999;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .language-switcher {
+        margin-left: 12px;
+    }
+    
+    .language-current {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .language-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .language-dropdown {
+        min-width: 140px;
+        right: -8px;
+    }
+    
+    .lang-option {
+        padding: 10px 12px;
+        font-size: 0.875rem;
+    }
+    
+    .lang-flag {
+        font-size: 1.25rem;
+    }
+}
+
+/* Alternative Style for Dark Backgrounds (optional) */
+.navbar-dark .language-current {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+}
+
+.navbar-dark .language-current .language-icon,
+.navbar-dark .language-current .language-arrow {
+    stroke: #ffffff;
+}
+
+.navbar-dark .language-current:hover {
+    background: #00A859;
+    border-color: #00A859;
+}
+
+/* Smooth Transitions for All Text Elements */
+[data-i18n], [data-i18n-html], [data-i18n-placeholder] {
+    transition: opacity 0.2s ease;
+}
+
+body.language-switching [data-i18n],
+body.language-switching [data-i18n-html] {
+    opacity: 0.7;
+}
+

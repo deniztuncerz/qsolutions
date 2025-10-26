@@ -1,0 +1,719 @@
+/**
+ * Tracking & Quote Sections with Aurora Background
+ * Glassmorphism Design - Q Solutions
+ */
+
+/* Main Tracking Section */
+.tracking-aurora-section {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 80px 20px 60px;
+    background: linear-gradient(180deg, #f0f4f8 0%, #d9e2ec 100%); /* Fallback */
+}
+
+/* Content Wrapper */
+.tracking-content-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Page Header */
+.tracking-header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.tracking-main-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #005691;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 86, 145, 0.1);
+}
+
+.tracking-subtitle {
+    font-size: 1.25rem;
+    color: rgba(0, 86, 145, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Glassmorphism Panel */
+.tracking-glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 86, 145, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    padding: 48px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.tracking-glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #005691 0%, #00A859 50%, #3A29FF 100%);
+    border-radius: 24px 24px 0 0;
+}
+
+.tracking-glass-panel:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 12px 48px rgba(0, 86, 145, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Panel Icon */
+.panel-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, rgba(0, 86, 145, 0.1) 0%, rgba(0, 168, 89, 0.1) 100%);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    transition: all 0.3s ease;
+}
+
+.tracking-glass-panel:hover .panel-icon {
+    transform: scale(1.05) rotate(5deg);
+    background: linear-gradient(135deg, rgba(0, 86, 145, 0.15) 0%, rgba(0, 168, 89, 0.15) 100%);
+}
+
+/* Panel Title */
+.panel-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #005691;
+    margin: 0 0 32px 0;
+    letter-spacing: -0.01em;
+}
+
+/* Modern Form */
+.tracking-form-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-label-modern {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #005691;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-input-modern {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #333;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid rgba(0, 86, 145, 0.2);
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'Manrope', sans-serif;
+}
+
+.form-input-modern:focus {
+    background: rgba(255, 255, 255, 1);
+    border-color: #005691;
+    box-shadow: 0 0 0 4px rgba(0, 86, 145, 0.1);
+}
+
+.form-input-modern::placeholder {
+    color: rgba(0, 86, 145, 0.4);
+    font-weight: 400;
+}
+
+/* Submit Button */
+.btn-tracking-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 36px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #005691 0%, #00A859 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 16px rgba(0, 86, 145, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-tracking-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-tracking-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 86, 145, 0.4);
+}
+
+.btn-tracking-submit:hover::before {
+    left: 100%;
+}
+
+.btn-tracking-submit:active {
+    transform: translateY(0);
+}
+
+/* Result Panel */
+.tracking-result-panel {
+    animation: slideInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tracking Info Header */
+.tracking-info-header {
+    background: linear-gradient(135deg, rgba(0, 86, 145, 0.05) 0%, rgba(0, 168, 89, 0.05) 100%);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+    border-left: 4px solid #005691;
+}
+
+.tracking-info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 0.95rem;
+}
+
+.tracking-info-label {
+    font-weight: 600;
+    color: #005691;
+}
+
+.tracking-info-value {
+    font-weight: 400;
+    color: #333;
+}
+
+/* Stepper (Vertical) */
+.tracking-stepper {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+}
+
+.stepper-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+    padding-bottom: 48px;
+}
+
+.stepper-step:last-child {
+    padding-bottom: 0;
+}
+
+.stepper-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 23px;
+    top: 48px;
+    bottom: 0;
+    width: 2px;
+    background: #e1e8ed;
+}
+
+/* Stepper Icon Container */
+.stepper-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
+}
+
+/* Stepper States */
+.stepper-step.completed .stepper-icon {
+    background: linear-gradient(135deg, #00A859 0%, #00d668 100%);
+    box-shadow: 0 4px 16px rgba(0, 168, 89, 0.3);
+}
+
+.stepper-step.active .stepper-icon {
+    background: linear-gradient(135deg, #005691 0%, #0071b8 100%);
+    box-shadow: 0 4px 16px rgba(0, 86, 145, 0.3);
+    animation: pulse 2s infinite;
+}
+
+.stepper-step.pending .stepper-icon {
+    background: #e1e8ed;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        box-shadow: 0 4px 16px rgba(0, 86, 145, 0.3);
+    }
+    50% {
+        box-shadow: 0 4px 24px rgba(0, 86, 145, 0.5);
+    }
+}
+
+.stepper-icon svg {
+    width: 24px;
+    height: 24px;
+}
+
+/* Stepper Content */
+.stepper-content {
+    flex: 1;
+    padding-top: 4px;
+}
+
+.stepper-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #005691;
+    margin: 0 0 8px 0;
+}
+
+.stepper-step.completed .stepper-title {
+    color: #00A859;
+}
+
+.stepper-step.pending .stepper-title {
+    color: #999;
+}
+
+.stepper-description {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0 0 4px 0;
+    line-height: 1.6;
+}
+
+.stepper-step.pending .stepper-description {
+    color: #999;
+}
+
+.stepper-timestamp {
+    font-size: 0.875rem;
+    color: #999;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .tracking-aurora-section {
+        padding: 60px 16px 40px;
+    }
+    
+    .tracking-main-title {
+        font-size: 2.5rem;
+    }
+    
+    .tracking-subtitle {
+        font-size: 1rem;
+    }
+    
+    .tracking-glass-panel {
+        padding: 32px 24px;
+    }
+    
+    .panel-title {
+        font-size: 1.5rem;
+    }
+    
+    .form-input-modern {
+        font-size: 1rem;
+    }
+    
+    .btn-tracking-submit {
+        padding: 16px 32px;
+        font-size: 0.9rem;
+    }
+    
+    .stepper-step {
+        gap: 16px;
+        padding-bottom: 40px;
+    }
+    
+    .stepper-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .stepper-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .stepper-step:not(:last-child)::before {
+        left: 19px;
+        top: 40px;
+    }
+}
+
+/* Loading State */
+.tracking-loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+.tracking-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid rgba(0, 86, 145, 0.1);
+    border-top-color: #005691;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Error State */
+.tracking-error {
+    background: rgba(231, 76, 60, 0.1);
+    border: 2px solid rgba(231, 76, 60, 0.3);
+    border-radius: 12px;
+    padding: 24px;
+    color: #c0392b;
+    text-align: center;
+    margin-top: 24px;
+}
+
+.tracking-error-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    margin: 0 0 8px 0;
+}
+
+.tracking-error-message {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ========================================
+   QUOTE SECTION WITH AURORA BACKGROUND
+   ======================================== */
+
+/* Main Quote Section */
+.quote-aurora-section {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 80px 20px 60px;
+    background: linear-gradient(180deg, #f0f4f8 0%, #d9e2ec 100%); /* Fallback */
+}
+
+/* Content Wrapper */
+.quote-content-wrapper {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* Page Header */
+.quote-header {
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.quote-main-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #005691;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-shadow: 0 2px 10px rgba(0, 86, 145, 0.1);
+}
+
+.quote-subtitle {
+    font-size: 1.25rem;
+    color: rgba(0, 86, 145, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Quote Glass Panel */
+.quote-glass-panel {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 8px 32px rgba(0, 86, 145, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    padding: 48px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.quote-glass-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #005691 0%, #00A859 50%, #3A29FF 100%);
+    border-radius: 24px 24px 0 0;
+}
+
+/* Quote Form Modern */
+.quote-form-modern {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Form Section */
+.form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #005691;
+    margin: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid rgba(0, 86, 145, 0.1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Form Grid (2 columns) */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Select Styling */
+.form-select-modern {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23005691' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 48px !important;
+}
+
+/* Textarea Styling */
+.form-textarea-modern {
+    resize: vertical;
+    min-height: 120px;
+    font-family: 'Manrope', sans-serif;
+    line-height: 1.6;
+}
+
+/* Quote Submit Button */
+.btn-quote-submit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 36px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #005691 0%, #00A859 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 4px 16px rgba(0, 86, 145, 0.3);
+    position: relative;
+    overflow: hidden;
+    margin-top: 16px;
+}
+
+.btn-quote-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-quote-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 86, 145, 0.4);
+}
+
+.btn-quote-submit:hover::before {
+    left: 100%;
+}
+
+.btn-quote-submit:active {
+    transform: translateY(0);
+}
+
+.btn-quote-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Quote Status Message */
+.quote-status-message {
+    margin-top: 24px;
+    padding: 20px 24px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    animation: slideInUp 0.4s ease;
+}
+
+.quote-status-message.success {
+    background: rgba(0, 168, 89, 0.1);
+    border: 2px solid rgba(0, 168, 89, 0.3);
+    color: #00864b;
+}
+
+.quote-status-message.error {
+    background: rgba(231, 76, 60, 0.1);
+    border: 2px solid rgba(231, 76, 60, 0.3);
+    color: #c0392b;
+}
+
+.quote-status-message h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.quote-status-message p {
+    margin: 0;
+}
+
+/* Loading State for Quote Form */
+.quote-form-modern.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Responsive Design - Quote */
+@media (max-width: 768px) {
+    .quote-aurora-section {
+        padding: 60px 16px 40px;
+    }
+    
+    .quote-main-title {
+        font-size: 2.5rem;
+    }
+    
+    .quote-subtitle {
+        font-size: 1rem;
+    }
+    
+    .quote-glass-panel {
+        padding: 32px 24px;
+    }
+    
+    .form-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .form-section {
+        gap: 16px;
+    }
+    
+    .form-section-title {
+        font-size: 1rem;
+    }
+    
+    .btn-quote-submit {
+        padding: 16px 32px;
+        font-size: 0.9rem;
+        width: 100%;
+    }
+}
+

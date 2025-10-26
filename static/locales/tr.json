@@ -1,0 +1,127 @@
+{
+  "nav": {
+    "home": "Anasayfa",
+    "services": "Hizmetler",
+    "about": "Hakkımızda",
+    "tracking": "Takip",
+    "quote": "Teklif Al"
+  },
+  "hero": {
+    "title": "Enerji Sistemleriniz için Uzman Çözümler",
+    "subtitle": "İnvertör, batarya ve enerji sistemleri bakımında profesyonel teknik destek",
+    "btnQuote": "Teklif Al",
+    "btnServices": "Hizmetlerimiz"
+  },
+  "services": {
+    "title": "Hizmetlerimiz",
+    "subtitle": "Enerji tesislerinizin verimliliğini ve ömrünü maksimize etmek için tasarlanmış kapsamlı mühendislik çözümleri sunuyoruz.",
+    "inverter": {
+      "title": "İnvertör Arıza Tespiti",
+      "description": "Önde gelen üreticilerin güneş enerjisi invertörleri için profesyonel arıza tespit ve bakım hizmetleri."
+    },
+    "battery": {
+      "title": "Batarya Sistemleri",
+      "description": "Yüksek ve düşük voltaj batarya sistemi tanı, onarım ve optimizasyon hizmetleri."
+    },
+    "diagnosis": {
+      "title": "Sistem Tanı",
+      "description": "Yenilenebilir enerji tesisleri için kapsamlı sistem analizi ve sorun giderme."
+    },
+    "maintenance": {
+      "title": "Önleyici Bakım",
+      "description": "Optimal sistem performansı ve uzun ömürlülük için düzenli bakım programları."
+    }
+  },
+  "about": {
+    "titlePart1": "Hakkımızda",
+    "titlePart2": "Q Solutions",
+    "description": "Q Solutions, sürdürülebilir enerji sektöründe, güneş paneli sistem kurulumlarından güç elektroniği çözümlerine kadar tam kapsamlı hizmet sunuyor. Mühendislik uzmanlığımızı, proje tasarımlarından, batarya ve inverter tamiri gibi teknik servis hizmetine kadar geniş bir yelpazede uyguluyoruz. Ürün satışı, arıza tespiti ve kesintisiz teknik destek sağlayarak, enerji yatırımlarınızın her aşamasında verimlilik ve güvenilirliği garanti eden bir çözüm ortağı olarak konumlanıyoruz."
+  },
+  "tracking": {
+    "title": "Arıza Takip Sistemi",
+    "subtitle": "Tamir sürecinizi gerçek zamanlı olarak takip edin",
+    "formTitle": "Takip Kodu ile Sorgula",
+    "trackingNumber": "Takip Numarası",
+    "trackingPlaceholder": "QS-123456",
+    "btnQuery": "SORGULA",
+    "detailsTitle": "Takip Detayları",
+    "trackingCode": "Takip Kodu",
+    "lastUpdate": "Son Güncelleme",
+    "errorTitle": "Hata",
+    "errorGeneral": "Lütfen geçerli bir takip kodu girin",
+    "notFound": "Takip kodu bulunamadı. Lütfen kodunuzu kontrol edin.",
+    "steps": {
+      "received": {
+        "title": "Talep Alındı",
+        "description": "Talebiniz başarıyla sisteme kaydedildi. En kısa sürede iletişime geçilecektir."
+      },
+      "inspection": {
+        "title": "Teknik İnceleme",
+        "description": "Cihazınız teknik ekibimiz tarafından inceleniyor"
+      },
+      "diagnosis": {
+        "title": "Arıza Tespiti",
+        "description": "Sorun tespit edildi ve çözüm planı hazırlanıyor"
+      },
+      "repair": {
+        "title": "Onarım Aşaması",
+        "description": "Cihazınız onarım sürecinde"
+      },
+      "testing": {
+        "title": "Test ve Kalite Kontrol",
+        "description": "Onarım tamamlandı, testler yapılıyor"
+      },
+      "completed": {
+        "title": "Tamamlandı",
+        "description": "Cihazınız teslime hazır"
+      }
+    }
+  },
+  "quote": {
+    "title": "Teklif Al",
+    "subtitle": "Cihazınız için hızlı ve güvenilir çözüm alın",
+    "formTitle": "Teklif Formu",
+    "successTitle": "Başarılı!",
+    "successMessage": "Talebiniz başarıyla alındı! <br><br><strong>Takip Kodunuz:</strong> {trackingCode}<br><br>Bu kodu kullanarak tamir sürecinizi takip edebilirsiniz.<br><br>En kısa sürede iletişime geçilecektir.",
+    "errorTitle": "Hata",
+    "errorValidation": "Lütfen tüm gerekli alanları doldurun",
+    "errorGeneral": "Teklif gönderilemedi. Lütfen tekrar deneyin.",
+    "form": {
+      "personalInfo": "Kişisel Bilgiler",
+      "fullName": "Ad Soyad",
+      "fullNamePlaceholder": "Adınız ve soyadınız",
+      "email": "E-posta",
+      "emailPlaceholder": "ornek@email.com",
+      "phone": "Telefon",
+      "phonePlaceholder": "5XXXXXXXXX",
+      "phoneTitle": "Lütfen sadece rakam girin (10-11 hane)",
+      "city": "Şehir",
+      "cityPlaceholder": "Şehriniz",
+      "deviceInfo": "Cihaz Bilgileri",
+      "deviceType": "Cihaz Tipi",
+      "selectOption": "Seçiniz...",
+      "inverter": "İnvertör",
+      "hvBattery": "Yüksek Voltaj Batarya",
+      "lvBattery": "Düşük Voltaj Batarya",
+      "brand": "Marka",
+      "selectDeviceFirst": "Önce cihaz tipi seçin",
+      "model": "Model",
+      "modelPlaceholder": "Cihaz modeli",
+      "issueTitle": "Sorun Açıklaması",
+      "issueDetails": "Detaylı Açıklama",
+      "issuePlaceholder": "Cihazınızla ilgili yaşadığınız sorunu detaylı olarak açıklayın...",
+      "btnSubmit": "TEKLİF AL"
+    }
+  },
+  "footer": {
+    "description": "Yenilenebilir enerji sistemleri için gelişmiş teknik hizmetler",
+    "servicesTitle": "Hizmetler",
+    "inverterRepair": "İnvertör Tamiri",
+    "batterySystems": "Batarya Sistemleri",
+    "systemDiagnostics": "Sistem Tanısı",
+    "supportTitle": "Destek",
+    "trackRepair": "Onarım Takibi",
+    "getQuote": "Teklif Al",
+    "copyright": "© 2024 Q Solutions. Tüm hakları saklıdır."
+  }
+}
