@@ -299,14 +299,34 @@ body {
   display: none;
   flex-direction: column;
   cursor: pointer;
+  position: absolute;
+  right: var(--spacing-lg);
+  z-index: 1001;
+  padding: 10px;
+  border-radius: 8px;
+  transition: var(--transition-normal);
+  background: rgba(255, 255, 255, 0.8);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 2px 8px rgba(0, 86, 145, 0.1);
+}
+
+.hamburger:hover {
+  background: rgba(0, 86, 145, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 86, 145, 0.2);
+  transform: scale(1.05);
+}
+
+.hamburger:active {
+  transform: scale(0.95);
 }
 
 .bar {
-  width: 25px;
+  width: 28px;
   height: 3px;
-  background: var(--text-color);
+  background: var(--primary-color);
   margin: 3px 0;
-  transition: var(--transition);
+  transition: var(--transition-normal);
+  border-radius: 2px;
 }
 
 /* Sections */
@@ -1037,10 +1057,30 @@ body {
   .nav-actions {
     flex-direction: column;
     gap: var(--spacing-md);
+    position: static;
+    right: auto;
   }
 
+  /* Mobile'da hamburger butonu görünsün */
   .hamburger {
     display: flex;
+    position: absolute;
+    right: var(--spacing-lg);
+  }
+  
+  /* Mobile'da language switcher menü içinde göster */
+  .language-switcher {
+    position: static;
+  }
+
+  .hamburger.active {
+    background: var(--primary-color);
+    border-color: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(0, 86, 145, 0.3);
+  }
+
+  .hamburger.active .bar {
+    background: white;
   }
 
   .hamburger.active .bar:nth-child(2) {
@@ -1048,11 +1088,11 @@ body {
   }
 
   .hamburger.active .bar:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
+    transform: translateY(9px) rotate(45deg);
   }
 
   .hamburger.active .bar:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
+    transform: translateY(-9px) rotate(-45deg);
   }
 
   .hero-title {
