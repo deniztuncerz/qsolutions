@@ -60,23 +60,35 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["200/hour"])
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# HTTPS redirect in production
-if os.getenv("ENVIRONMENT") == "production":
-    app.add_middleware(HTTPSRedirectMiddleware)
+# HTTPS redirect in production (Railway has its own SSL)
+# if os.getenv("ENVIRONMENT") == "production":
+#     app.add_middleware(HTTPSRedirectMiddleware)
 
-# Trusted hosts
-allowed_hosts = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts)
+# Trusted hosts - Allow Railway domains and wildcards
+allowed_hosts = os.getenv("ALLOWED_HOSTS", "*").split(",")
+# Only enforce TrustedHostMiddleware if ALLOWED_HOSTS is specifically set (not wildcard)
+if allowed_hosts != ["*"]:
+    app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts)
 
-# CORS middleware - SECURE VERSION
-allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:8001").split(",")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=allowed_origins,  # ✅ Specific domains only
-    allow_credentials=True,
-    allow_methods=["GET", "POST"],  # ✅ Only needed methods
-    allow_headers=["Content-Type", "X-API-Key"],  # ✅ Only needed headers
-)
+# CORS middleware - Allow Railway domains
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "*").split(",")
+# Use wildcard in development/Railway, specific domains in production with custom domain
+if allowed_origins == ["*"]:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Allow all origins (Railway deployment)
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=allowed_origins,  # ✅ Specific domains only
+        allow_credentials=True,
+        allow_methods=["GET", "POST"],  # ✅ Only needed methods
+        allow_headers=["Content-Type", "X-API-Key"],  # ✅ Only needed headers
+    )
 
 # Security headers middleware
 @app.middleware("http")
