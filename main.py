@@ -61,14 +61,7 @@ app = FastAPI(
 )
 
 # Rate limiting (optional, requires Redis)
-def rate_limit_decorator(limit_string):
-    """Conditional rate limit decorator"""
-    def decorator(func):
-        if SLOWAPI_AVAILABLE:
-            return limiter.limit(limit_string)(func)
-        return func
-    return decorator
-
+limiter = None  # Initialize as None
 if SLOWAPI_AVAILABLE:
     try:
         limiter = Limiter(key_func=get_remote_address, default_limits=["200/hour"])
@@ -78,6 +71,7 @@ if SLOWAPI_AVAILABLE:
     except Exception as e:
         logger.warning(f"Rate limiting disabled: {e}")
         SLOWAPI_AVAILABLE = False
+        limiter = None
 
 # HTTPS redirect in production (Railway has its own SSL)
 # if os.getenv("ENVIRONMENT") == "production":
@@ -209,7 +203,7 @@ async def serve_faq():
         )
 
 @app.post("/api/v1/submit_quote", response_model=QuoteDisplay)
-@limiter.limit("5/minute")  # ✅ Rate limiting: 5 submissions per minute
+# @limiter.limit("5/minute")  # ✅ Rate limiting: 5 submissions per minute (disabled for Railway)
 async def submit_quote(request: Request, quote_data: QuoteCreate, db: Session = Depends(get_db)):
     """
     Submit a new quote request (rate limited)
@@ -275,7 +269,7 @@ async def submit_quote(request: Request, quote_data: QuoteCreate, db: Session = 
         )
 
 @app.get("/api/v1/track/{tracking_code}", response_model=StatusDisplay)
-@limiter.limit("20/minute")  # ✅ Rate limiting: 20 queries per minute
+# @limiter.limit("20/minute")  # ✅ Rate limiting: 20 queries per minute (disabled for Railway)
 async def track_repair(request: Request, tracking_code: str, db: Session = Depends(get_db)):
     """
     Track repair status by tracking code (rate limited)
@@ -328,7 +322,7 @@ async def track_repair(request: Request, tracking_code: str, db: Session = Depen
         )
 
 @app.post("/api/v1/admin/update_status")
-@limiter.limit("30/minute")  # ✅ Rate limiting for admin
+# @limiter.limit("30/minute")  # ✅ Rate limiting for admin (disabled for Railway)
 async def update_repair_status(
     request: Request,
     status_data: AdminStatusUpdate,
