@@ -72,7 +72,12 @@ def start_server():
 
 def main():
     """Main function"""
-    print("🔧 Q Solutions - Advanced API-Driven SPA & Repair Tracking System")
+    # Set UTF-8 encoding for Windows console
+    if sys.platform == 'win32':
+        import io
+        sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+    
+    print("Q Solutions - Advanced API-Driven SPA & Repair Tracking System")
     print("=" * 70)
     
     # Check if we're in the right directory

@@ -1,17 +1,25 @@
 """
-Q Solutions - Advanced API-Driven SPA & Repair Tracking System
-FastAPI Backend Application
+Q Solutions - Security Enhanced Version
+Bu dosya güvenlik düzeltmelerini içerir.
+main.py'yi bu dosya ile değiştirin veya değişiklikleri manuel uygulayın.
 """
 import os
-import uuid
+import secrets
+import string
+import logging
 from datetime import datetime
 from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException, status, Header
+from fastapi import FastAPI, Depends, HTTPException, status, Header, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from database import get_db, engine
 from models import Quote, RepairStatusUpdate, Base
@@ -20,59 +28,124 @@ from utils import append_quote_async
 from email_service import send_emails_async, send_status_update_email
 from gmail_simple_service import send_emails_simple_async, send_status_update_email_simple
 
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('qsolutions.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
 # Create database tables
 Base.metadata.create_all(bind=engine)
-
-# Initialize FastAPI app
-app = FastAPI(
-    title="Q Solutions API",
-    description="Advanced API-Driven SPA & Repair Tracking System",
-    version="1.0.0"
-)
-
-# CORS middleware for frontend integration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # Configure this properly for production
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# Mount static files for serving the frontend
-app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Load environment variables
 from dotenv import load_dotenv
 load_dotenv()
 
-# Admin API Key dependency
+# Initialize FastAPI app
+app = FastAPI(
+    title="Q Solutions API",
+    description="Advanced API-Driven SPA & Repair Tracking System",
+    version="1.0.0",
+    docs_url="/api/docs" if os.getenv("ENVIRONMENT") != "production" else None,  # Disable docs in production
+    redoc_url="/api/redoc" if os.getenv("ENVIRONMENT") != "production" else None
+)
+
+# Rate limiting
+limiter = Limiter(key_func=get_remote_address, default_limits=["200/hour"])
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# HTTPS redirect in production
+if os.getenv("ENVIRONMENT") == "production":
+    app.add_middleware(HTTPSRedirectMiddleware)
+
+# Trusted hosts
+allowed_hosts = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+app.add_middleware(TrustedHostMiddleware, allowed_hosts=allowed_hosts)
+
+# CORS middleware - SECURE VERSION
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:8001").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,  # ✅ Specific domains only
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],  # ✅ Only needed methods
+    allow_headers=["Content-Type", "X-API-Key"],  # ✅ Only needed headers
+)
+
+# Security headers middleware
+@app.middleware("http")
+async def add_security_headers(request: Request, call_next):
+    response = await call_next(request)
+    
+    # Security headers
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "DENY"
+    response.headers["X-XSS-Protection"] = "1; mode=block"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    
+    # HSTS only in production with HTTPS
+    if os.getenv("ENVIRONMENT") == "production":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+    
+    # CSP - Content Security Policy
+    csp = (
+        "default-src 'self'; "
+        "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
+        "font-src 'self' https://fonts.gstatic.com; "
+        "img-src 'self' data: https:; "
+        "connect-src 'self';"
+    )
+    response.headers["Content-Security-Policy"] = csp
+    
+    return response
+
+# Request logging middleware
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.info(f"Request: {request.method} {request.url.path} - Client: {request.client.host}")
+    response = await call_next(request)
+    logger.info(f"Response: {response.status_code}")
+    return response
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Admin API Key dependency - SECURE VERSION
 def verify_admin_api_key(x_api_key: str = Header(None)):
     """
-    Dependency to verify admin API key
+    Dependency to verify admin API key (timing-attack safe)
     """
     admin_key = os.getenv("ADMIN_API_KEY")
     if not admin_key:
+        logger.error("Admin API key not configured")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Admin API key not configured"
+            detail="Service configuration error"
         )
     
-    if x_api_key != admin_key:
+    # Timing-attack safe comparison
+    if not x_api_key or not secrets.compare_digest(x_api_key, admin_key):
+        logger.warning(f"Invalid API key attempt from: {x_api_key[:10] if x_api_key else 'None'}...")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid API key"
+            detail="Invalid credentials"
         )
     return True
 
 def generate_tracking_code() -> str:
     """
-    Generate a unique tracking code
+    Generate a cryptographically secure tracking code
     """
-    # Generate a simple tracking code like QS-1001, QS-1002, etc.
-    # In production, you might want to use a more sophisticated approach
-    timestamp = str(int(datetime.now().timestamp()))[-6:]
-    return f"QS-{timestamp}"
+    # Use secrets module for cryptographic randomness
+    random_part = ''.join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(8))
+    return f"QS-{random_part}"
 
 @app.get("/", response_class=HTMLResponse)
 async def serve_frontend():
@@ -83,7 +156,11 @@ async def serve_frontend():
         with open("static/index.html", "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     except FileNotFoundError:
-        return HTMLResponse(content="<h1>Frontend not found. Please ensure index.html is in the static directory.</h1>")
+        logger.error("Frontend file not found: static/index.html")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page not found"
+        )
 
 @app.get("/faq", response_class=HTMLResponse)
 async def serve_faq():
@@ -94,16 +171,23 @@ async def serve_faq():
         with open("static/faq.html", "r", encoding="utf-8") as f:
             return HTMLResponse(content=f.read())
     except FileNotFoundError:
-        return HTMLResponse(content="<h1>FAQ page not found.</h1>")
+        logger.error("FAQ file not found: static/faq.html")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Page not found"
+        )
 
 @app.post("/api/v1/submit_quote", response_model=QuoteDisplay)
-async def submit_quote(quote_data: QuoteCreate, db: Session = Depends(get_db)):
+@limiter.limit("5/minute")  # ✅ Rate limiting: 5 submissions per minute
+async def submit_quote(request: Request, quote_data: QuoteCreate, db: Session = Depends(get_db)):
     """
-    Submit a new quote request
+    Submit a new quote request (rate limited)
     """
     try:
-        # Generate unique tracking code
+        # Generate cryptographically secure tracking code
         tracking_code = generate_tracking_code()
+        
+        logger.info(f"New quote submission: {tracking_code}")
         
         # Create quote record
         db_quote = Quote(
@@ -130,7 +214,7 @@ async def submit_quote(quote_data: QuoteCreate, db: Session = Depends(get_db)):
         db.add(initial_status)
         db.commit()
         
-        # Prepare data for Google Sheets (run as background task)
+        # Prepare data for Google Sheets
         quote_dict = {
             'tracking_code': tracking_code,
             'created_at': db_quote.created_at.strftime('%Y-%m-%d %H:%M:%S'),
@@ -147,36 +231,37 @@ async def submit_quote(quote_data: QuoteCreate, db: Session = Depends(get_db)):
         # Run Google Sheets update in background
         await append_quote_async(quote_dict)
         
-        # Send email notifications in background (Simple Gmail)
-        # Temporarily disabled due to Gmail authentication issues
-        # await send_emails_simple_async(
-        #     customer_email=db_quote.email,
-        #     customer_name=db_quote.full_name,
-        #     tracking_code=tracking_code,
-        #     device_type=db_quote.device_type,
-        #     issue=db_quote.issue_description
-        # )
-        print(f"[INFO] Email sending temporarily disabled. Quote {tracking_code} submitted successfully.")
+        logger.info(f"Quote {tracking_code} submitted successfully")
         
         return QuoteDisplay.model_validate(db_quote)
         
     except Exception as e:
         db.rollback()
+        logger.error(f"Quote submission failed: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error creating quote: {str(e)}"
+            detail="An error occurred while processing your request. Please try again later."
         )
 
 @app.get("/api/v1/track/{tracking_code}", response_model=StatusDisplay)
-async def track_repair(tracking_code: str, db: Session = Depends(get_db)):
+@limiter.limit("20/minute")  # ✅ Rate limiting: 20 queries per minute
+async def track_repair(request: Request, tracking_code: str, db: Session = Depends(get_db)):
     """
-    Track repair status by tracking code
+    Track repair status by tracking code (rate limited)
     """
     try:
+        # Validate tracking code format
+        if not tracking_code.startswith("QS-") or len(tracking_code) != 11:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid tracking code format"
+            )
+        
         # Find the quote by tracking code
         quote = db.query(Quote).filter(Quote.tracking_code == tracking_code).first()
         
         if not quote:
+            logger.warning(f"Tracking code not found: {tracking_code}")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Tracking code not found"
@@ -194,6 +279,8 @@ async def track_repair(tracking_code: str, db: Session = Depends(get_db)):
                 detail="No status updates found"
             )
         
+        logger.info(f"Tracking query for: {tracking_code}")
+        
         return StatusDisplay(
             tracking_code=tracking_code,
             current_status=latest_status.status_message,
@@ -203,25 +290,29 @@ async def track_repair(tracking_code: str, db: Session = Depends(get_db)):
     except HTTPException:
         raise
     except Exception as e:
+        logger.error(f"Tracking failed for {tracking_code}: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error retrieving status: {str(e)}"
+            detail="An error occurred while retrieving status. Please try again later."
         )
 
 @app.post("/api/v1/admin/update_status")
+@limiter.limit("30/minute")  # ✅ Rate limiting for admin
 async def update_repair_status(
+    request: Request,
     status_data: AdminStatusUpdate,
     db: Session = Depends(get_db),
     _: bool = Depends(verify_admin_api_key)
 ):
     """
-    Update repair status (Admin only)
+    Update repair status (Admin only, rate limited)
     """
     try:
         # Find the quote by tracking code
         quote = db.query(Quote).filter(Quote.tracking_code == status_data.tracking_code).first()
         
         if not quote:
+            logger.warning(f"Admin update failed: Tracking code {status_data.tracking_code} not found")
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Tracking code not found"
@@ -236,15 +327,7 @@ async def update_repair_status(
         db.add(status_update)
         db.commit()
         
-        # Send status update email to customer (Simple Gmail)
-        # Temporarily disabled due to Gmail authentication issues
-        # await send_status_update_email_simple(
-        #     customer_email=quote.email,
-        #     customer_name=quote.full_name,
-        #     tracking_code=status_data.tracking_code,
-        #     status=status_data.status_message
-        # )
-        print(f"[INFO] Status update email temporarily disabled. Status updated for {status_data.tracking_code}")
+        logger.info(f"Status updated for {status_data.tracking_code}: {status_data.status_message}")
         
         return {"message": f"Status updated successfully for tracking code {status_data.tracking_code}"}
         
@@ -252,9 +335,10 @@ async def update_repair_status(
         raise
     except Exception as e:
         db.rollback()
+        logger.error(f"Status update failed: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Error updating status: {str(e)}"
+            detail="An error occurred while updating status. Please try again later."
         )
 
 @app.get("/api/v1/health")
@@ -262,8 +346,21 @@ async def health_check():
     """
     Health check endpoint
     """
-    return {"status": "healthy", "service": "Q Solutions API"}
+    return {
+        "status": "healthy",
+        "service": "Q Solutions API",
+        "version": "1.0.0",
+        "timestamp": datetime.now().isoformat()
+    }
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    port = int(os.getenv("PORT", 8001))
+    uvicorn.run(
+        app,
+        host="0.0.0.0",
+        port=port,
+        log_level="info",
+        access_log=True
+    )
+
