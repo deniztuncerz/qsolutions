@@ -15,25 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-try:
-    from slowapi import Limiter, _rate_limit_exceeded_handler
-    from slowapi.util import get_remote_address
-    from slowapi.errors import RateLimitExceeded
-    SLOWAPI_AVAILABLE = True
-except ImportError:
-    SLOWAPI_AVAILABLE = False
-    logger.warning("SlowAPI not available, rate limiting disabled")
-from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
-from starlette.middleware.trustedhost import TrustedHostMiddleware
-
-from database import get_db, engine
-from models import Quote, RepairStatusUpdate, Base
-from schemas import QuoteCreate, QuoteDisplay, StatusUpdateCreate, StatusDisplay, AdminStatusUpdate
-from utils import append_quote_async
-from email_service import send_emails_async, send_status_update_email
-from gmail_simple_service import send_emails_simple_async, send_status_update_email_simple
-
-# Setup logging
+# Setup logging FIRST (before imports that use logger)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -43,6 +25,25 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.util import get_remote_address
+    from slowapi.errors import RateLimitExceeded
+    SLOWAPI_AVAILABLE = True
+except ImportError:
+    SLOWAPI_AVAILABLE = False
+    logger.warning("SlowAPI not available, rate limiting disabled")
+    
+from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
+from starlette.middleware.trustedhost import TrustedHostMiddleware
+
+from database import get_db, engine
+from models import Quote, RepairStatusUpdate, Base
+from schemas import QuoteCreate, QuoteDisplay, StatusUpdateCreate, StatusDisplay, AdminStatusUpdate
+from utils import append_quote_async
+from email_service import send_emails_async, send_status_update_email
+from gmail_simple_service import send_emails_simple_async, send_status_update_email_simple
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
