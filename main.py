@@ -15,9 +15,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
+try:
+    from slowapi import Limiter, _rate_limit_exceeded_handler
+    from slowapi.util import get_remote_address
+    from slowapi.errors import RateLimitExceeded
+    SLOWAPI_AVAILABLE = True
+except ImportError:
+    SLOWAPI_AVAILABLE = False
+    logger.warning("SlowAPI not available, rate limiting disabled")
 from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
@@ -55,10 +60,24 @@ app = FastAPI(
     redoc_url="/api/redoc" if os.getenv("ENVIRONMENT") != "production" else None
 )
 
-# Rate limiting
-limiter = Limiter(key_func=get_remote_address, default_limits=["200/hour"])
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+# Rate limiting (optional, requires Redis)
+def rate_limit_decorator(limit_string):
+    """Conditional rate limit decorator"""
+    def decorator(func):
+        if SLOWAPI_AVAILABLE:
+            return limiter.limit(limit_string)(func)
+        return func
+    return decorator
+
+if SLOWAPI_AVAILABLE:
+    try:
+        limiter = Limiter(key_func=get_remote_address, default_limits=["200/hour"])
+        app.state.limiter = limiter
+        app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+        logger.info("Rate limiting enabled")
+    except Exception as e:
+        logger.warning(f"Rate limiting disabled: {e}")
+        SLOWAPI_AVAILABLE = False
 
 # HTTPS redirect in production (Railway has its own SSL)
 # if os.getenv("ENVIRONMENT") == "production":
